@@ -93,13 +93,19 @@ $(document).ready(function()  {
     }
 
     if ($('#planner')) {
-    	$('#plannerbadge').html(cch.getNumEventsToday());
+    	num = cch.getNumEventsToday();
+        num = (num=="0") ? "" : num;
+    	$('#plannerbadge').html(num);
     }
     if ($('#cchfacility')) {
-    	$('#facilitybadge').html(cch.getNumFacilities());
+    	num = cch.getNumFacilities();
+        num = (num=="0") ? "" : num;
+    	$('#facilitybadge').html(num);
     }
     if ($('#cchnurse')) {
-    	$('#nursebadge').html(cch.getNumNurses());
+    	num = cch.getNumNurses();
+        num = (num=="0") ? "" : num;
+    	$('#nursebadge').html(num);
     }
     
     $('.gotoevent').click(function(e) {

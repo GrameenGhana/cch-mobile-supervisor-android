@@ -404,12 +404,14 @@ public class WebAppInterface {
     private String nurseTargetListItemAsHTML(MyTarget t)
     {   	
     	String flag = (t.progress.equals("Completed")) ? "icon-flag-2 fg-green smaller" : "icon-flag-2 fg-red smaller";
-    	  	
-    	return  "<a class=\"list\" href=\"#\">" 
-             +  "  <div class=\"list-content\" data-url=\"viewtarget/"+t.id+"\"> " 
+    	String style = (t.progress.equals("Completed")) ? "" : "color: red;";
+    	String remark = (t.progress.equals("Completed")) ? t.description : "Justification: "+t.justification;
+
+    	return  "<a class=\"list\" id=\"target_"+t.id+"\" href=\"#\">" 
+             +  "  <div class=\"list-content\">" 
              +  "   <span class=\"list-title\"><span class=\"place-right "+flag+"\"></span>"+t.target+"</span>" 
-             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>"+t.progress+"</span>" 
-             +  "   <span class=\"list-remark\">"+t.description+"</span>" 
+             +  "   <span class=\"list-subtitle\" style=\""+style+"\"><span class=\"place-right\"></span>"+t.progress+"</span>" 
+             +  "   <span class=\"list-remark\">"+remark+"</span>" 
              +  "  </div>"
     	     +  "</a>";    
     }
@@ -725,6 +727,21 @@ public class WebAppInterface {
     			        	}
     				        
     				        // Get targets
+    				        MyTarget t = new MyTarget();
+    				        t.id = 1L;
+    				        t.progress = "Completed";
+    				        t.target = "Gain 5 pounds";
+    				        t.description = "Personal growth target";
+    				        t.justification = "None needed.";
+    				        ts.add(t);
+    				           
+    				        MyTarget t1 = new MyTarget();
+    				        t1.id = 2L;
+    				        t1.progress = "Missed";
+    				        t1.justification = "Ebola killed most of the people.";
+    				        t1.target = "Register 2000 clients";
+    				        t1.description = "ANC Coverage target";
+    				        ts.add(t1);
     			        	
     			        	// Get events	
     				        JSONObject calendar = nurses.getJSONObject(j).getJSONObject("calendar");
@@ -972,6 +989,7 @@ public class WebAppInterface {
     	public String target;
     	public String progress;
     	public String description;
+    	public String justification;
     }
     
     	

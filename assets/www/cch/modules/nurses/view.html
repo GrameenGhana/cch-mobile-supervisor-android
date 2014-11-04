@@ -13,7 +13,6 @@
     <link href="../../css/metro-bootstrap-responsive.min.css" rel="stylesheet">
     <link href="../../css/iconFont.min.css" rel="stylesheet">
     <link href="../../css/cch.css" rel="stylesheet">
-    
         
     <script src="../../js/jquery.min.js"></script>
     <script src="../../js/jquery.widget.min.js"></script>
@@ -56,6 +55,7 @@
         <h2><span class="nursename"></span>'s Targets</h2> <hr/>
         <div id="targets" class="listview-outlook" data-role="listview">
         </div>
+
             
         <br/><br/>
 
@@ -64,6 +64,7 @@
         </div>
             
         <script type="text/javascript">
+
             function loadData(nid)
             {
                 var c = new CCH();    
@@ -87,6 +88,7 @@
 
                 courses = c.getNurseCourses(nid);
                 $('#courses').html(courses);
+
 
                 $('.gotoevent').click(function(e) {
                     var url = $(this).data('url');
