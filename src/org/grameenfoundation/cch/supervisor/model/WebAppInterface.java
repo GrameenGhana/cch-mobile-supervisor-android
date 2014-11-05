@@ -52,7 +52,7 @@ public class WebAppInterface {
     public WebAppInterface(Context c) {
         mContext = c;
         dbh = new DbHelper(c);
-        readCalendarEvent(c);
+        //readCalendarEvent(c);
         readFacilityNurseInfo();
     }
       
@@ -253,31 +253,21 @@ public class WebAppInterface {
 		// Find nurses
     	for(MyDistrict district: Districts) {	
  		    for(MyFacility f: district.getFacilities()) {
- 		  	    for(MyNurse n: f.getNurses())
- 		    	{
+ 		  	    for(MyNurse n: f.getNurses()) {
  		    		if (String.valueOf(n.id).equals(id)) {  
- 		    	
- 		    			
  		    			if (n.targets.size() > 0) {
- 		    				nurseHtml += "<div class=\"list-group\">" 
- 	 		                        +  "    <a href=\"\" class=\"group-title\">Targets</a>"
- 	 		                        +  "    <div class=\"group-content\">";
  		    				for(MyTarget t: n.targets) {
  		    					nurseHtml += nurseTargetListItemAsHTML(t);
- 		    				}
- 		    				
- 	 		    			nurseHtml += "</div></div>";
-
+ 		    				} 		    				
  		    			} else {
  		    				nurseHtml += emptyNurseTargetListItemAsHTML();
- 		    			}
- 		    			
+ 		    			} 		    			
  		    		}
- 		    		
  		    	}
- 		    	
  		    }
  		}
+    	
+    	if (nurseHtml == "") { nurseHtml = emptyNurseTargetListItemAsHTML(); }
      	
      	return nurseHtml;
      }
@@ -293,28 +283,19 @@ public class WebAppInterface {
 		// Find nurses
     	for(MyDistrict district: Districts) {	
  		    for(MyFacility f: district.getFacilities()) {
- 		  	    for(MyNurse n: f.getNurses())
- 		    	{
+ 		  	    for(MyNurse n: f.getNurses()) {
  		    		if (String.valueOf(n.id).equals(id)) {  
  		    			if (n.courses.size() > 0) {
-
- 		    					nurseHtml += "<div class=\"list-group\">" 
- 		    						+  "    <a href=\"\" class=\"group-title\">Courses</a>"
- 		    						+  "    <div class=\"group-content\">";
- 		    			
- 		    					for(MyCourse c: n.courses) {
- 		    						nurseHtml += nurseCourseListItemAsHTML(c);
+		    					for(MyCourse c: n.courses) {
+		    						nurseHtml += nurseCourseListItemAsHTML(c);
  		    					}
- 		 		    			nurseHtml += "</div></div>";
 
  		    			} else {
  		    					nurseHtml += emptyNurseCourseListItemAsHTML();
  		    			}
  		    			
  		    		}
- 		    		
  		    	}
- 		    	
  		    }
  		}
      	
@@ -375,12 +356,7 @@ public class WebAppInterface {
 	     
 	     	if (nurseHtml=="") {
 	     		nurseHtml = emptyNurseListItemAsHTML();
-	     	} else {
-	     		nurseHtml = "<div class=\"list-group\">" 
-                          +  "    <a href=\"\" class=\"group-title\">My Nurses</a>"
-                          +  "    <div class=\"group-content\">"
-                          + nurseHtml + "</div></div>";
-	     	}
+	     	} 
 	     	 	
 	     	return nurseHtml;
 	}
@@ -418,13 +394,13 @@ public class WebAppInterface {
     
     private String nurseCourseListItemAsHTML(MyCourse c)
     {   	  	
-    	String flag = (c.status.equals("Completed")) ? "icon-flag-2 fg-green smaller" : "icon-flag-2 fg-red smaller";
-    	  	
-    	return  "<a class=\"list\" href=\"#\">" 
-             +  "  <div class=\"list-content\" data-url=\"viewtarget/"+c.id+"\"> " 
-             +  "   <span class=\"list-title\"><span class=\"place-right "+flag+"\"></span>"+c.topic+"</span>" 
-             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>"+c.title+"</span>" 
-             +  "   <span class=\"list-remark\">Status: "+c.status+"; Time taken: "+c.time+"</span>" 
+    	String flag = (c.status.equals("100")) ? "icon-flag-2 fg-green smaller" : "icon-flag-2 fg-red smaller";
+    	  	   	
+    	return  "<a id=\"course-"+c.id+"\" class=\"list\" href=\"#\">" 
+             +  "  <div class=\"list-content\"> " 
+             +  "   <span class=\"list-title\"><span class=\"place-right "+flag+"\"></span>"+c.title+"</span>" 
+             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>Quiz score: "+c.score+"; Attempts: "+c.attempts+"</span>" 
+             +  "   <span class=\"list-remark\">"+c.status+"% complete; Last seen: "+c.last_accessed+"</span>" 
              +  "  </div>"
     	     +  "</a>";    
     }
@@ -703,27 +679,30 @@ public class WebAppInterface {
     			        	while(keys.hasNext())
     			        	{
     			        		 String ctitle = (String) keys.next();
-    			        		 JSONObject activities = courses.getJSONObject(ctitle);
-    			        		 Iterator<String> akeys = activities.keys();
+    			        		 JSONObject cinfo = courses.getJSONObject(ctitle);
     			        		 
-    			        		 while(akeys.hasNext())
+    			        		 MyCourse c = new MyCourse();
+	    				         c.id = cid; 
+	    				         c.title = ctitle;
+	    				         c.score = cinfo.getString("score"); 
+	    				         c.attempts =  cinfo.getString("attempts");
+	    				         //c.time_taken = cinfo.getString("time_taken");
+	    				         c.last_accessed = cinfo.getString("last_accessed");
+	    				         c.status = cinfo.getString("percentcomplete");
+	    				         
+    			        		 /*Iterator<String> tkeys = cinfo.getJSONObject("topics").keys();
+	    				         while(tkeys.hasNext())
     			        		 {
-    			        			 String ctopic = (String) akeys.next();
-    			        			 JSONArray cinfo = activities.getJSONArray(ctopic);
-    			        			 for(int l=0; l < cinfo.length(); l++) {
-    			        				 String time = cinfo.getJSONObject(i).getString("time");
-    			        				 String status = cinfo.getJSONObject(i).getString("done");
-    			        				 
-    			        				 MyCourse c = new MyCourse();
-    		    				         c.id = cid; 
-    		    				         c.title = ctitle;
-    		    				         c.topic = ctopic;
-    		    				         c.time = time;
-    		    				         c.status = status;
-    		    				         cid = cid + 1;
-    		    				         cs.add(c);
-    			        			 }
-    			        		 }
+    			        			 MyTopic topic = new MyTopic();
+    			        			 topic.title =  (String) tkeys.next();
+    			        			 topic.last_accessed = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("last_accessed");
+    			        			 topic.time_taken = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("time_taken");
+    			        			 topic.status = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("percentcomplete");
+    			        			 c.topics.add(topic);
+    			        		 }    
+    			        		 */ 
+	    				         cs.add(c);		        		 
+	    				         cid = cid + 1;
     			        	}
     				        
     				        // Get targets
@@ -978,10 +957,21 @@ public class WebAppInterface {
     {
     	public long id;
     	public String title;
-    	public String topic;
     	public String status;
-    	public String time;
+    	public String score;
+    	public String attempts;
+    	//public ArrayList<MyTopic> topics = new ArrayList<MyTopic>();
+    	//public String time_taken;
+    	public String last_accessed;
     }
+    
+    /*private class MyTopic 
+    {
+    	public String title;
+    	public String last_accessed;
+    	public String time_taken;
+    	public String status;
+    }*/
     
     private class MyTarget
     {

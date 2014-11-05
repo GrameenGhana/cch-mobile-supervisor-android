@@ -53,14 +53,23 @@
         <br/><br/>
 
         <h2><span class="nursename"></span>'s Targets</h2> <hr/>
-        <div id="targets" class="listview-outlook" data-role="listview">
+
+        <div class="listview-outlook" data-role="listview">
+            <div class="list-group collapsed">
+                   <a href="" class="group-title">Targets</a>
+                   <div id="targets" class="group-content"></div>
+            </div>
         </div>
 
             
         <br/><br/>
 
         <h2><span class="nursename"></span>'s Courses</h2> <hr/>
-        <div id="courses" class="listview-outlook" data-role="listview">
+        <div class="listview-outlook" data-role="listview">
+            <div class="list-group">
+                   <a href="" class="group-title">Courses</a>
+                   <div id="courses" class="group-content"></div>
+            </div>
         </div>
             
         <script type="text/javascript">
@@ -88,7 +97,6 @@
 
                 courses = c.getNurseCourses(nid);
                 $('#courses').html(courses);
-
 
                 $('.gotoevent').click(function(e) {
                     var url = $(this).data('url');
