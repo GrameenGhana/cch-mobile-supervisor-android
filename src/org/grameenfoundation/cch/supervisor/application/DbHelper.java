@@ -7,7 +7,6 @@ import org.grameenfoundation.cch.supervisor.model.CCHTrackerLog;
 import org.grameenfoundation.cch.supervisor.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +30,6 @@ public class DbHelper extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	private SharedPreferences prefs;
 	private Context ctx;
-	private SQLiteDatabase read;
 	
 	// CCH: Tracker table
 	private static final String CCH_TRACKER_TABLE = "CCHTrackerLog";
@@ -54,22 +52,10 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String CCH_USER_LASTNAME = "last_name";
 	private static final String CCH_USER_SUPERVISOR_INFO = "supervisor_info";
 		
-	// CCH: Events Table
-	public static final String EVENTS_SET_TABLE="events_set";
-	public static final String COL_EVENT_SET_NAME="event_name";
-	public static final String COL_EVENT_PERIOD="event_period";
-	public static final String COL_EVENT_NUMBER="event_number";
-	public static final String COL_EVENT_MONTH="month";
-	public static final String COL_SYNC_STATUS ="sync_status";
 	
-	private static final String TEXT_TYPE = " TEXT";
-	private static final String COMMA_SEP = ",";
-		
-
-	public DbHelper(Context ctx) { //
+	public DbHelper(Context ctx)  { 
 		super(ctx, DB_NAME, null, DB_VERSION);
 		db = this.getWritableDatabase();
-		read=this.getReadableDatabase();
 		prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 		this.ctx = ctx;
 	}
@@ -78,7 +64,6 @@ public class DbHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		createUserTable(db);
 		createCCHTrackerTable(db);
-		createEventsSetTable(db);
 	}
 	
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
@@ -129,20 +114,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.update(CCH_USER_TABLE, values, CCH_STAFF_ID + "= '"+u.getUsername()+"'", null);
         db.close(); // Closing database connection        
     }
-	
-	public void updateUser(String staff_id, String apikey, String firstname, String lastname) 
-	{
-        SQLiteDatabase db = this.getWritableDatabase(); 
-        ContentValues values = new ContentValues();
-        values.put(CCH_USER_APIKEY, apikey);
-        values.put(CCH_USER_FIRSTNAME, firstname);
-        values.put(CCH_USER_LASTNAME, lastname);
-    
-        // Inserting Row        
-        db.update(CCH_USER_TABLE, values, CCH_STAFF_ID + "=" + staff_id, null);
-        db.close(); // Closing database connection        
-    }
-	
+		
     // check if User exists
 	public User checkUserExists(User u) 
 	{			
@@ -259,256 +231,9 @@ public class DbHelper extends SQLiteOpenHelper {
 	}
 
     // Events
-	public void createEventsSetTable(SQLiteDatabase db)
-	{
-	//	table create statement for events set table 
-		final String EVENT_SET_CREATE_TABLE =
-			    "CREATE TABLE " + EVENTS_SET_TABLE + " (" +
-			    		BaseColumns._ID + " INTEGER PRIMARY KEY," +
-			    		COL_EVENT_SET_NAME + TEXT_TYPE + COMMA_SEP +
-			    		COL_EVENT_PERIOD + TEXT_TYPE + COMMA_SEP +
-			    		COL_SYNC_STATUS + TEXT_TYPE + COMMA_SEP +
-			    		COL_EVENT_MONTH + TEXT_TYPE + COMMA_SEP +
-			    		COL_EVENT_NUMBER+TEXT_TYPE+
-			    " )";
-		db.execSQL(EVENT_SET_CREATE_TABLE);
-	}
-		
 	
-    public boolean insertEventSet(String event_name, String event_period, String event_number, String month,String sync_status){
-		ContentValues values = new ContentValues();
-		values.put(COL_EVENT_SET_NAME,event_name);
-		values.put(COL_EVENT_PERIOD,event_period);
-		values.put(COL_SYNC_STATUS,sync_status);
-		values.put(COL_EVENT_NUMBER,event_number);
-		values.put(COL_EVENT_MONTH,month);
-		
-		 db.insert(EVENTS_SET_TABLE, null, values);
-		return true;
-	}
-    	
-	public boolean updateEventTarget(String sync_status, long id)
-	{
-		    
-	        String updateQuery = "Update "+EVENTS_SET_TABLE+" set "+
-	        					COL_SYNC_STATUS+" = '"+ sync_status +"'"+
-	        					" where "+BaseColumns._ID+" = "+id;
-	        db.execSQL(updateQuery);
-		return true;
-		
-	}
-	
-    public ArrayList<String> getAllEventName(String month){
-	      ArrayList<String> list=new ArrayList<String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_SET_NAME
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_MONTH
-             +" = '"+month+"'";
-	 
-	System.out.println(strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-		list.add(c.getString(c.getColumnIndex(COL_EVENT_SET_NAME)));
-		c.moveToNext();						
-	}
-	c.close();
-	return list;
-}
-
-public ArrayList<String> getAllEventNumber(String month){
-	ArrayList<String> list=new ArrayList<String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_NUMBER
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_MONTH
-             +" = '"+month+"'";
-	 
-	System.out.println(strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-		list.add(c.getString(c.getColumnIndex(COL_EVENT_NUMBER)));
-		c.moveToNext();						
-	}
-	c.close();
-	return list;
-}
-
-
-public ArrayList<String> getAllEventID(String month){
-	ArrayList<String> list=new ArrayList<String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_SET_NAME
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_MONTH
-             +" = '"+month+"'";
-	 
-	System.out.println(strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-	list.add(c.getString(c.getColumnIndex(BaseColumns._ID)));
-		c.moveToNext();						
-	}
-	c.close();
-	return list;
-}
-
-
-public HashMap<String,String> getAllDailyEvents(String month){
-	HashMap<String,String> list=new HashMap<String,String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_SET_NAME
-             +","+COL_EVENT_NUMBER
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_PERIOD
-             + " = '"+"Daily"+"'"
-             +" and "+COL_EVENT_MONTH
-             +" = '"+month+"'"
-             +" and "+COL_SYNC_STATUS
-             + " = '"+"new_record"+"'";	
-	 
-	System.out.println(strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-		list.put("event_id",c.getString(c.getColumnIndex(BaseColumns._ID)));
-		list.put("event_name", c.getString(c.getColumnIndex(COL_EVENT_SET_NAME)));
-		list.put("event_number",  c.getString(c.getColumnIndex(COL_EVENT_NUMBER)));
-		c.moveToNext();	
-		System.out.println(list);
-	}
-	c.close();
-	return list;
-}
-public HashMap<String,String> getAllMonthlyEvents(String month){
-	HashMap<String,String> list=new HashMap<String,String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_SET_NAME
-             +","+COL_EVENT_NUMBER
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_PERIOD
-             + " = '"+"Monthly"+"'"
-             +" and "+COL_EVENT_MONTH
-             +" = '"+month+"'"
-             +" and "+COL_SYNC_STATUS
-             + " = '"+"new_record"+"'";	
-	 
-	System.out.println(strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-		list.put("event_id",c.getString(c.getColumnIndex(BaseColumns._ID)));
-		list.put("event_name", c.getString(c.getColumnIndex(COL_EVENT_SET_NAME)));
-		list.put("event_number",  c.getString(c.getColumnIndex(COL_EVENT_NUMBER)));
-		c.moveToNext();	
-		System.out.println(list);
-	}
-	c.close();
-	return list;
-}
-
-public HashMap<String,String> getAllWeeklyEvents(String month){
-	HashMap<String,String> list=new HashMap<String,String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_SET_NAME
-             +","+COL_EVENT_NUMBER
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_PERIOD
-             + " = '"+"Weekly"+"'"
-             +" and "+COL_EVENT_MONTH
-             +" = '"+month+"'"
-             +" and "+COL_SYNC_STATUS
-             + " = '"+"new_record"+"'";	
-	 
-	System.out.println("Weekly events "+strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-		list.put("event_id",c.getString(c.getColumnIndex(BaseColumns._ID)));
-		list.put("event_name", c.getString(c.getColumnIndex(COL_EVENT_SET_NAME)));
-		list.put("event_number",  c.getString(c.getColumnIndex(COL_EVENT_NUMBER)));
-		c.moveToNext();	
-		System.out.println("Weekly events"+list);
-	}
-	c.close();
-	return list;
-}
-public HashMap<String,String> getAllYearlyEvents(String month){
-	HashMap<String,String> list=new HashMap<String,String>();
-	 String strQuery="select "+BaseColumns._ID
-             +","+COL_EVENT_SET_NAME
-             +","+COL_EVENT_NUMBER
-             +" from "+EVENTS_SET_TABLE
-             +" where "+COL_EVENT_PERIOD
-             + " = '"+"Yearly"+"'"
-             +" and "+COL_EVENT_MONTH
-             +" = '"+month+"'"
-             +" and "+COL_SYNC_STATUS
-             + " = '"+"new_record"+"'";	
-	 
-	System.out.println(strQuery);
-	Cursor c=read.rawQuery(strQuery, null);
-	c.moveToFirst();
-	while (c.isAfterLast()==false){
-		list.put("event_id",c.getString(c.getColumnIndex(BaseColumns._ID)));
-		list.put("event_name", c.getString(c.getColumnIndex(COL_EVENT_SET_NAME)));
-		list.put("event_number",  c.getString(c.getColumnIndex(COL_EVENT_NUMBER)));
-		c.moveToNext();						
-	}
-	c.close();
-	return list;
-}
-	
-	public boolean editEventCategory(String event_category,String event_number,String event_period, long id)
-	{
-	    
-        String updateQuery = "Update "+EVENTS_SET_TABLE+" set "+
-        					COL_EVENT_SET_NAME+" = '"+ event_category +"'"+
-        					","+COL_EVENT_NUMBER+" = '"+event_number+"'"+
-        					","+COL_EVENT_PERIOD+" = '"+event_period+"'"+
-        					" where "+BaseColumns._ID+" = "+id;
-        db.execSQL(updateQuery);
-        return true;		
-	}
-
-	public boolean deleteEventCategory(long id)
-	{
-		String deleteQuery="Delete from "+EVENTS_SET_TABLE+" where "+
-			 			BaseColumns._ID+" = "+ id;
-		System.out.println(deleteQuery);
-        	db.execSQL(deleteQuery);
-        	return true;
-	}
-	
-	
-	public void onLogout(){
-		
-		// Store current users prefs.
-		String userid = prefs.getString(ctx.getString(R.string.prefs_username),"" );
-		
-		if (! userid.equals(""))
-		{
-			String firstname = "";
-			String lastname ="" ;
-			
-			if (! prefs.getString(ctx.getString(R.string.prefs_display_name),"").isEmpty()) {
-				String displayname = prefs.getString(ctx.getString(R.string.prefs_display_name),"");
-				String[] name = displayname.split(" ");
-				if (name.length > 0) {
-					firstname = name[0];
-					lastname = name[1];
-				} else {
-					firstname = displayname;
-				}
-			}
-				
-			updateUser(userid, prefs.getString(ctx.getString(R.string.prefs_api_key),""), firstname, lastname);
-		}
-		
-		
+	public void onLogout()
+	{			
 		// Reset preferences
 		Editor editor = prefs.edit();
     	editor.putString(ctx.getString(R.string.prefs_username), "");
@@ -516,5 +241,4 @@ public HashMap<String,String> getAllYearlyEvents(String month){
     	editor.putString(ctx.getString(R.string.prefs_display_name),"");
     	editor.commit();
 	}
-	
 }

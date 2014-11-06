@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import org.grameenfoundation.cch.supervisor.R;
 import org.grameenfoundation.cch.supervisor.application.DbHelper;
+import org.grameenfoundation.cch.supervisor.model.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,8 +33,7 @@ import android.widget.Toast;
 public class WebAppInterface {
 	
 	public static final String TAG = WebAppInterface.class.getSimpleName();
-
-    
+   
     Context mContext;
     private DbHelper dbh;
     
@@ -232,11 +232,14 @@ public class WebAppInterface {
                         +  "    <a href=\"\" class=\"group-title\">"+district.name+"</a>"
                         +  "    <div class=\"group-content\">";
      		  
+     		    ArrayList<MyNurse> nurses = new ArrayList<MyNurse>();
      		    for(MyFacility fac: district.getFacilities()) {
-     		    	for(MyNurse n: fac.getNurses()) {
-     		    		nurseHtml += nurseListItemAsHTML(n);
-     		    	}
+     		    	for(MyNurse n: fac.getNurses()) {	nurses.add(n); }
      		    }
+     		    
+     		    Collections.sort(nurses, new NurseNameComparator());
+     		    for(MyNurse n: nurses) { nurseHtml += nurseListItemAsHTML(n); }
+
      		    nurseHtml += "</div></div>";
      		}
      	}
@@ -405,7 +408,7 @@ public class WebAppInterface {
     	return  "<a id=\"course-"+c.id+"\" class=\"list\" href=\"#\">" 
              +  "  <div class=\"list-content\"> " 
              +  "   <span class=\"list-title\"><span class=\"place-right "+flag+"\"></span>"+c.title+"</span>" 
-             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>Quiz score: "+score+"; Attempts: "+c.attempts+"</span>" 
+             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>Final exam score: "+score+"; Attempts: "+c.attempts+"</span>" 
              +  "   <span class=\"list-remark\">"+c.status+"% complete; Last seen: "+c.last_accessed+"</span>" 
              +  "  </div>"
     	     +  "</a>";    

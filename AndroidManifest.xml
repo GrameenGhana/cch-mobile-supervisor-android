@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.grameenfoundation.cch.supervisor"
     android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="20" />
 
     <uses-permission
         xmlns:android="http://schemas.android.com/apk/res/android"

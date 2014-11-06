@@ -12,6 +12,12 @@
 bin/
 gen/
 
+# Intellij files
+*.iml
+*.classpath
+.idea/
+.settings/
+
 # Gradle files
 .gradle/
 build/

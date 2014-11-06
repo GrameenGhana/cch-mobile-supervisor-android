@@ -19,10 +19,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -263,5 +266,40 @@ public class MainActivity extends Activity implements SubmitListener   {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+			case R.id.menu_logout:
+				logout();
+				return true;
+		}
+		return true;
+	}
+
+	private void logout() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setCancelable(false);
+		builder.setTitle(R.string.logout);
+		builder.setMessage(R.string.logout_confirm);
+		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				
+				DbHelper db = new DbHelper(MainActivity.this);
+				db.onLogout();
+				
+				// restart the app
+				MainActivity.this.startActivity(new Intent(MainActivity.this, StartupActivity.class));
+				MainActivity.this.finish();
+			}
+		});
+		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				return; // do nothing
+			}
+		});
+		builder.show();
 	}
 }

@@ -44,10 +44,6 @@
                    <div id="futureEvents" class="group-content"></div>
             </div>
 
-            <div class="list-group collapsed">
-                   <a href="" class="group-title">Past</a>
-                   <div id="pastEvents" class="group-content"></div>
-            </div>
         </div>
 
         <br/><br/>
@@ -89,9 +85,6 @@
     				 
     	        events = c.getNurseEventsList('future', nid);
     	        $('#futureEvents').html(events);
-
-    	        events = c.getNurseEventsList('past', nid);
-    	        $('#pastEvents').html(events);
 
                 targets = c.getNurseTargets(nid);
                 $('#targets').html(targets);
