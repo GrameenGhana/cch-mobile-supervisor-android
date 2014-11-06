@@ -149,6 +149,8 @@ public class MainActivity extends Activity implements SubmitListener   {
 																    
 					    Pattern viewEventPattern = Pattern.compile("viewcal\\/(\\d+)");
 					    Matcher viewEventMatcher = viewEventPattern.matcher(url);
+					    
+					    //android.util.Log.e("SupervisorMainActivity", url);
 					    			    				    					    
 						if (viewEventMatcher.find()) {
 							    

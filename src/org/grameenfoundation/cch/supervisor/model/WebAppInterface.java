@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -160,7 +162,7 @@ public class WebAppInterface {
     private String facilityListItemAsHTML(MyFacility fac)
     {
     	String subtitle = (fac.getNurses().size()==0) ? "No nurses" : fac.getNurses().size() + " nurses";
-    	subtitle += (fac.getEvents().size()==0) ? ";  No events" : ";  " + fac.getEvents().size() + " events";
+    	subtitle += (fac.getEvents().size()==0) ? ";  No events this month" : ";  " + fac.getEvents().size() + " events";
    	
     	return  "<a class=\"list\" href=\"#\">" 
              +  "  <div class=\"list-content gotoevent\" data-url=\"view.html?id="+fac.facId+"\"> " 
@@ -286,6 +288,7 @@ public class WebAppInterface {
  		  	    for(MyNurse n: f.getNurses()) {
  		    		if (String.valueOf(n.id).equals(id)) {  
  		    			if (n.courses.size() > 0) {
+ 		    				    Collections.sort(n.courses, new CourseNameComparator());
 		    					for(MyCourse c: n.courses) {
 		    						nurseHtml += nurseCourseListItemAsHTML(c);
  		    					}
@@ -348,8 +351,10 @@ public class WebAppInterface {
 	     	
 	     	for(MyDistrict district: Districts) {
 	     		    for(MyFacility fac: district.getFacilities()) {
-	     		    	for(MyNurse nu: fac.getNurses()) {
-	     		    		nurseHtml += nurseListItemAsHTML(nu);
+	     		    	if (String.valueOf(fac.facId).equals(id)) {
+	     		    		for(MyNurse nu: fac.getNurses()) {
+	     		    			nurseHtml += nurseListItemAsHTML(nu);
+	     		    		}
 	     		    	}
 	     		    }
 	     	}
@@ -364,7 +369,7 @@ public class WebAppInterface {
     private String nurseListItemAsHTML(MyNurse nu)
     {
     	String subtitle = (nu.courses.size()==0) ? "No courses" : nu.courses.size() + " courses";
-    	subtitle += (nu.events.size()==0) ? ";  No events" : ";  " + nu.events.size() + " events";
+    	subtitle += (nu.events.size()==0) ? ";  No events this month" : ";  " + nu.events.size() + " events";
     	subtitle += (nu.targets.size()==0) ? ";  No targets" : ";  " + nu.targets.size() + " targets";
     	String location = nu.district + ", " + nu.facility;
    	
@@ -395,11 +400,12 @@ public class WebAppInterface {
     private String nurseCourseListItemAsHTML(MyCourse c)
     {   	  	
     	String flag = (c.status.equals("100")) ? "icon-flag-2 fg-green smaller" : "icon-flag-2 fg-red smaller";
-    	  	   	
+    	String score = (c.score.equals("Not taken")) ? c.score : c.score+"%";
+    	
     	return  "<a id=\"course-"+c.id+"\" class=\"list\" href=\"#\">" 
              +  "  <div class=\"list-content\"> " 
              +  "   <span class=\"list-title\"><span class=\"place-right "+flag+"\"></span>"+c.title+"</span>" 
-             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>Quiz score: "+c.score+"; Attempts: "+c.attempts+"</span>" 
+             +  "   <span class=\"list-subtitle\"><span class=\"place-right\"></span>Quiz score: "+score+"; Attempts: "+c.attempts+"</span>" 
              +  "   <span class=\"list-remark\">"+c.status+"% complete; Last seen: "+c.last_accessed+"</span>" 
              +  "  </div>"
     	     +  "</a>";    
@@ -408,49 +414,39 @@ public class WebAppInterface {
     private String emptyNurseListItemAsHTML()
     {
     	return  "<div class=\"list-group\">" 
-             +  "    <a href=\"\" class=\"group-title\"></a>"
+             +  "    <a href=\"\" class=\"group-title\">Nurses</a>"
              +  "    <div class=\"group-content\">"
-    		 +	"           <a class=\"list\" href=\"#\">" 
+       		 +  "           <a class=\"list\" href=\"#\">" 
              +  "  				<div class=\"list-content\"> " 
              +  "   				<span class=\"list-title\"><span class=\"place-right\"></span>No nurses found.</span>" 
              +  "   				<span class=\"list-subtitle\"><span class=\"place-right\"></span>No nurses associated with this supervisor.</span>" 
              +  "   				<span class=\"list-remark\"></span>" 
              +  "  				</div>"
     	     +  "			</a>"
-             +  "    </div>"
-    	     +  "</div>";    
+             +  "     </div>"
+    	     +  "</div>";   
     }
     
     private String emptyNurseTargetListItemAsHTML()
     {
-    	return  "<div class=\"list-group\">" 
-             +  "    <a href=\"\" class=\"group-title\">Targets</a>"
-             +  "    <div class=\"group-content\">"
-    		 +	"           <a class=\"list\" href=\"#\">" 
+    	return  "           <a class=\"list\" href=\"#\">" 
              +  "  				<div class=\"list-content\"> " 
              +  "   				<span class=\"list-title\"><span class=\"place-right\"></span>No targets found.</span>" 
              +  "   				<span class=\"list-subtitle\"><span class=\"place-right\"></span>No targets associated with this nurse.</span>" 
              +  "   				<span class=\"list-remark\"></span>" 
              +  "  				</div>"
-    	     +  "			</a>"
-             +  "    </div>"
-    	     +  "</div>";    
+    	     +  "			</a>";  
     }
     
     private String emptyNurseCourseListItemAsHTML()
     {
-    	return  "<div class=\"list-group\">" 
-             +  "    <a href=\"\" class=\"group-title\">Courses</a>"
-             +  "    <div class=\"group-content\">"
-    		 +	"           <a class=\"list\" href=\"#\">" 
+    	return 	"           <a class=\"list\" href=\"#\">" 
              +  "  				<div class=\"list-content\"> " 
              +  "   				<span class=\"list-title\"><span class=\"place-right\"></span>No courses found.</span>" 
              +  "   				<span class=\"list-subtitle\"><span class=\"place-right\"></span>No courses associated with this nurse.</span>" 
              +  "   				<span class=\"list-remark\"></span>" 
              +  "  				</div>"
-    	     +  "			</a>"
-             +  "    </div>"
-    	     +  "</div>";    
+    	     +  "			</a>";  
     }
     
        
@@ -612,14 +608,14 @@ public class WebAppInterface {
     
     
     /** Utility classes */
-    private MyDistrict hasDistrict(String name)
+    private int hasDistrict(String name)
     {
     	for(MyDistrict d: Districts)
     	{
-    		if (d.name.equals(name)) return d;
+    		if (d.name.equals(name)) return Districts.indexOf(d);
     	}
     	
-    	return null;
+    	return -1;
     }
     
     @SuppressWarnings("unchecked")
@@ -640,19 +636,14 @@ public class WebAppInterface {
     				JSONObject obj = new JSONObject(data);
     				JSONObject supervisor = obj.getJSONObject("data").getJSONObject("supervisor");
     				JSONArray facilities = supervisor.getJSONArray("facilities");
-    				
+    				    				
 				    Long cid = 1L;
 				    Long eid = 1L;
 				    
     				for(int i=0; i < facilities.length(); i++) 
     				{
-    					String dname = facilities.getJSONObject(i).getString("district");
-    					MyDistrict district = hasDistrict(dname);
-    					if (district==null) { 
-    						district = new MyDistrict(); 
-    						district.name = dname;
-    					}
-    					
+    			        String dname = facilities.getJSONObject(i).getString("district");
+
     					// Add facility info
     					String fid = facilities.getJSONObject(i).getString("id");
     					String fname = facilities.getJSONObject(i).getString("name");
@@ -674,37 +665,40 @@ public class WebAppInterface {
     				        ArrayList<MyEvent> es = new ArrayList<MyEvent>();
 
     				        // Get courses	
-    				        JSONObject courses = nurses.getJSONObject(j).getJSONObject("courses");
-    			        	Iterator<String> keys = courses.keys();
-    			        	while(keys.hasNext())
+    				        JSONObject courses = nurses.getJSONObject(j).optJSONObject("courses");
+    			        	if (courses != null)
     			        	{
-    			        		 String ctitle = (String) keys.next();
-    			        		 JSONObject cinfo = courses.getJSONObject(ctitle);
-    			        		 
-    			        		 MyCourse c = new MyCourse();
-	    				         c.id = cid; 
-	    				         c.title = ctitle;
-	    				         c.score = cinfo.getString("score"); 
-	    				         c.attempts =  cinfo.getString("attempts");
-	    				         //c.time_taken = cinfo.getString("time_taken");
-	    				         c.last_accessed = cinfo.getString("last_accessed");
-	    				         c.status = cinfo.getString("percentcomplete");
-	    				         
-    			        		 /*Iterator<String> tkeys = cinfo.getJSONObject("topics").keys();
-	    				         while(tkeys.hasNext())
-    			        		 {
-    			        			 MyTopic topic = new MyTopic();
-    			        			 topic.title =  (String) tkeys.next();
-    			        			 topic.last_accessed = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("last_accessed");
-    			        			 topic.time_taken = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("time_taken");
-    			        			 topic.status = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("percentcomplete");
-    			        			 c.topics.add(topic);
-    			        		 }    
-    			        		 */ 
-	    				         cs.add(c);		        		 
-	    				         cid = cid + 1;
+	    				        Iterator<String> keys = courses.keys();
+	    			        	while(keys.hasNext())
+	    			        	{
+	    			        		 String ctitle = (String) keys.next();
+	    			        		 JSONObject cinfo = courses.getJSONObject(ctitle);
+	    			        		 
+	    			        		 MyCourse c = new MyCourse();
+		    				         c.id = cid; 
+		    				         c.title = ctitle;
+		    				         c.score = cinfo.getString("score"); 
+		    				         c.attempts =  cinfo.getString("attempts");
+		    				         //c.time_taken = cinfo.getString("time_taken");
+		    				         c.last_accessed = cinfo.getString("last_accessed");
+		    				         c.status = cinfo.getString("percentcomplete");
+		    				         
+	    			        		 /*Iterator<String> tkeys = cinfo.getJSONObject("topics").keys();
+		    				         while(tkeys.hasNext())
+	    			        		 {
+	    			        			 MyTopic topic = new MyTopic();
+	    			        			 topic.title =  (String) tkeys.next();
+	    			        			 topic.last_accessed = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("last_accessed");
+	    			        			 topic.time_taken = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("time_taken");
+	    			        			 topic.status = cinfo.getJSONObject("topics").getJSONObject(topic.title).getString("percentcomplete");
+	    			        			 c.topics.add(topic);
+	    			        		 }    
+	    			        		 */ 
+		    				         cs.add(c);		        		 
+		    				         cid = cid + 1;
+	    			        	}
     			        	}
-    				        
+    			        	
     				        // Get targets
     				        MyTarget t = new MyTarget();
     				        t.id = 1L;
@@ -723,104 +717,59 @@ public class WebAppInterface {
     				        ts.add(t1);
     			        	
     			        	// Get events	
-    				        JSONObject calendar = nurses.getJSONObject(j).getJSONObject("calendar");
-    			        	Iterator<String> calkeys = calendar.keys();
-    			        	while(calkeys.hasNext())
+    				        JSONObject calendar = nurses.getJSONObject(j).optJSONObject("calendar");
+    			        	if(calendar != null)
     			        	{
-    			        		 String caltitle = (String) calkeys.next();
-    			        		 JSONObject event = calendar.getJSONObject(caltitle);
-    			        		 
-    			        		 String etitle = event.getString("title");
-    			        		 String location = event.getString("location");
-    			        	     String type = event.getString("type");
-    			        		 Long estart = Long.parseLong(event.getString("start"));
-    			        		 Long eend = Long.parseLong(event.getString("end"));
-    			        			 
-    			        		 MyEvent ev = new MyEvent();
-    			        		 ev.eventId = eid;
-    			        		 ev.eventType = type;
-    			        		 ev.location = location;
-    			        		 ev.description = ""; 
-    			        		 ev.startDate = estart;
-    			        		 ev.endDate = eend;
-    			        		 eid = eid + 1;
-    			        		 es.add(ev);
-    			        		     
-    			        		 facility.addEvent(eid, type, location, etitle, estart, eend);    			        		 
+	    				        Iterator<String> calkeys = calendar.keys();
+	    			        	while(calkeys.hasNext())
+	    			        	{
+	    			        		 String caltitle = (String) calkeys.next();
+	    			        		 JSONObject event = calendar.getJSONObject(caltitle);
+	    			        		 
+	    			        		 String etitle = event.getString("title");
+	    			        		 String location = event.getString("location");
+	    			        	     String type = event.getString("type");
+	    			        		 Long estart = Long.parseLong(event.getString("start"));
+	    			        		 Long eend = Long.parseLong(event.getString("end"));
+	    			        			 
+	    			        		 MyEvent ev = new MyEvent();
+	    			        		 ev.eventId = eid;
+	    			        		 ev.eventType = type;
+	    			        		 ev.location = location;
+	    			        		 ev.description = ""; 
+	    			        		 ev.startDate = estart;
+	    			        		 ev.endDate = eend;
+	    			        		 eid = eid + 1;
+	    			        		 es.add(ev);
+	    			        		     
+	    			        		 facility.addEvent(eid, type, location, etitle, estart, eend);    			        		 
+	    			        	}
     			        	}
-    			        	
     			        	
     			        	nurseNum++;
     			        	facility.addNurse(nid, nname, ntitle, dname, fname, es, cs, ts);
     			        }
     			        
     			        facNum++;
-    			        district.addFacility(facility);
-    					Districts.add(district);
+    			     
+    			        int exists = hasDistrict(dname);
+    			        
+    					if (exists >= 0) {
+    						Districts.get(exists).addFacility(facility);    						
+    					} else {
+    						MyDistrict district = new MyDistrict(); 
+    						district.name = dname;
+        			        district.addFacility(facility);
+        					Districts.add(district);
+    					}
+    					
     				}
     			} catch(JSONException e) {
     				Log.e("SupervisorMainActivity", e.getMessage());
     			}
     		       		   
     	   } else {
-    		   Districts.clear();
-    		   /*
-    		   // THIS IS TEST DATA TO CHECK VISUALIZATION
-    		   facNum = 1;
-    		   nurseNum = 2;
-        	   
-    		   Districts.clear();
-
-    		   MyDistrict district = new MyDistrict();
-    		   district.name = "South Dayi";
-           
-	           MyFacility payload = new MyFacility();
-	           payload.name = "Abui-Tsita CHPS";
-	           payload.facId = 202;
-	           payload.facType = "CHPS";
-	 
-	           // Add events
-	           payload.addEvent(1, "ANC" , "Kasoa", "ANC - Static at Kasoa", 1401379184000L, 1401469184000L);    
-	           payload.addEvent(2,"Unknown","Unknown","Clinical Work",1406530840000L,1406534440000L);
-	           
-	           // Add nurses
-	           ArrayList<MyTarget> ts = new ArrayList<MyTarget>();
-	           MyTarget t = new MyTarget();
-	           t.id = 1L;
-	           t.progress = "Completed";
-	           t.target = "Gain 5 pounds";
-	           t.description = "Personal growth target";
-	           ts.add(t);
-	           
-	           MyTarget t1 = new MyTarget();
-	           t1.id = 2L;
-	           t1.progress = "In Progress";
-	           t1.target = "Register 2000 clients";
-	           t1.description = "ANC Coverage target";
-	           ts.add(t1);
-	           
-	           ArrayList<MyCourse> cs = new ArrayList<MyCourse>();
-	           MyCourse c = new MyCourse();
-	           c.id = 1L;
-	           c.title = "Family Planning 101";
-	           c.topic = "Better birth spacing saves the lives of children";
-	           c.time = "2h 42min";
-	           c.status = "Completed";
-	           cs.add(c);
-	           MyCourse c1 = new MyCourse();
-	           c1.id = 2L;
-	           c1.title = "Family Planning for People Living with HIV";
-	           c1.topic = "Benefits for providers and health care systems";
-	           c1.time = "6h 35min";
-	           c1.status = "In Progress";
-	           cs.add(c1);
-	           	           
-	           payload.addNurse(366L, "Evelyn Amuh", "Community Health Nurse", "South Dayi", "Abui-Tsita CHPS", payload.getEvents(), cs, ts);
-	           payload.addNurse(638L, "DDIO", "District Health Information Officer", "South Dayi", "Abui-Tsita CHPS", payload.getEvents(), new ArrayList<MyCourse>(), new ArrayList<MyTarget>());   	
-	           
-	           district.addFacility(payload);
-	           Districts.add(district);
-	           */
+    		   Districts.clear(); 
     	   }
     }
 
@@ -882,7 +831,11 @@ public class WebAppInterface {
 		public String name;
 	    private ArrayList<MyFacility> facilities = new ArrayList<MyFacility>();
 		public void addFacility(MyFacility fac) { this.facilities.add(fac); }
-		public ArrayList<MyFacility> getFacilities() { return this.facilities; }
+		public ArrayList<MyFacility> getFacilities() 
+		{
+			Collections.sort(this.facilities, new FacilityNameComparator());
+			return this.facilities; 
+		}
 	}
 
     private class MyFacility
@@ -907,7 +860,10 @@ public class WebAppInterface {
 	    		this.nurses.add(nu);
 	    	}
 	    	
-	    	public ArrayList<MyNurse> getNurses() { return this.nurses; }
+	    	public ArrayList<MyNurse> getNurses() { 
+				Collections.sort(this.nurses, new NurseNameComparator());
+	    		return this.nurses; 
+	    	}
 	    	
 	    	public void addEvent(long id, String type, String location, String desc, Long start, Long end)
 	    	{
@@ -949,10 +905,9 @@ public class WebAppInterface {
     	public String facility;
     	public ArrayList<MyEvent> events = new ArrayList<MyEvent>();
     	public ArrayList<MyCourse> courses = new ArrayList<MyCourse>();
-    	public ArrayList<MyTarget> targets = new ArrayList<MyTarget>();
-    	
+    	public ArrayList<MyTarget> targets = new ArrayList<MyTarget>();   	
     }
-	
+ 	
     private class MyCourse
     {
     	public long id;
@@ -1057,5 +1012,27 @@ public class WebAppInterface {
 	        }
 	        
 	 }
+	
+	 /*** comparators **/  
+    private class NurseNameComparator implements Comparator<MyNurse>
+    {
+    	public int compare(MyNurse one, MyNurse two) {
+    		return one.name.compareToIgnoreCase(two.name);
+    	}
+    }
+    
+    private class FacilityNameComparator implements Comparator<MyFacility>
+    {
+    	public int compare(MyFacility one, MyFacility two) {
+    		return one.name.compareToIgnoreCase(two.name);
+    	}
+    }
+    
+    private class CourseNameComparator implements Comparator<MyCourse>
+    {
+    	public int compare(MyCourse one, MyCourse two) {
+    		return one.title.compareToIgnoreCase(two.title);
+    	}
+    }
 }
 
