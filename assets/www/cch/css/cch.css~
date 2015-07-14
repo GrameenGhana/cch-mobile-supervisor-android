@@ -123,11 +123,3 @@ p{line-height:1.2em;}
 .pocsubtitle{font-family:Tahoma; font-size:15px; font-weight:bold;line-height:0.1;}
 
 br{line-height:0.4;}
-.datatable{border:solid 1px  #ccc}
-.datatable th{border-bottom:solid 2px  #ccc;border-left:solid 1px #f0f0f0}
-.datatable td{border-left:solid 1px  #ccc;}
-tr:nth-child(even) {background: #f0f0f0}
-tr:nth-child(odd) {background: #FFF}
-div.span3{ }
-.itemdata strong{padding:0px 30px}
-
