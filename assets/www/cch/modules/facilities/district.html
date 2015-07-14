@@ -24,15 +24,26 @@
 
     <div class="container">
 
-        <h1 id="facname">Facilities</h1>
+        <h1 id="facname">Facilities In <span id='dname'></span></h1>
         <hr/>
    
         <div id="facilities" class="listview-outlook" data-role="listview">
         </div>
-        <script type="text/javascript">
+         <script type="text/javascript">
+         
+        function loadData(fid)
+        {
             var c = new CCH();    
-            facilities = c.getFacilityList();
+            facilities = c.getFacilitiesInDistrict(fid);
    		    $('#facilities').html(facilities);
+   		    dnames=c.getDistrictName(fid);
+   		    $('#distname').html(dnames);
+   		    
+            $('.gotoevent').click(function(e) {
+                    var url = $(this).data('url');
+                    window.location = url; 
+             });
+            }
         </script>
     </div>
   </body>

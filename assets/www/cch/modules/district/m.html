@@ -25,48 +25,36 @@
 
     <div class="container">
 
-        <h1 id="facname"></h1>
+        <h1 id="facname">District Name Here</h1>
         <hr/>
 
-        <h2>Events</h2> <hr/>
+     <h2>District Supervisors</h2> <hr/>
         <div class="listview-outlook" data-role="listview">
-        <div class="list-group collapsed">
-                <a href="" class="group-title">Past</a>
-                <div id="pastEvents" class="group-content"></div>
-            </div>
             <div class="list-group">
-                <a href="" class="group-title">Today</a>
-                <div id="todaysEvents" class="group-content"></div>
-            </div>
-
-            <div class="list-group collapsed">
-                <a href="" class="group-title">Tomorrow</a>
-                <div id="tomorrowsEvents" class="group-content"></div>
-            </div>
-
-            <div class="list-group collapsed">
-                   <a href="" class="group-title">Future</a>
-                   <div id="futureEvents" class="group-content"></div>
-            </div>
-
-        </div>
+                   <a href="" class="group-title">Supervisor</a>
+                   <div id="nurses" class="group-content">
+                   <a class="list" href="view.html">
+						<div class="list-content gotoevent" data-url="view.html?id=">
+						 <span class="list-title"><span class="place-right">
+						</span>Supervisor Name</span>
+						 <span class="list-remark">District I ; Supervises: 3 Facilities;</span> </div>
+						</a>
+		</div></div>
 
         <br/><br/>
 
-        <h2>Nurses</h2> <hr/>
+        <h2>Facilities</h2> <hr/>
         <div class="listview-outlook" data-role="listview">
             <div class="list-group">
-                   <a href="" class="group-title">My Nurses</a>
-                   <div id="nurses" class="group-content"></div>
-            </div>
-        </div>
-        <h2>Supervisor</h2> <hr/>
-        <div class="listview-outlook" data-role="listview">
-            <div class="list-group">
-                   <a href="" class="group-title">My Supervisors</a>
-                   <div id="supervisors" class="group-content">
-                   
-                   </div>
+                   <a href="" class="group-title">Facilities in District</a>
+                   <div id="nurses" class="group-content">
+                   <a class="list" href="view.html">
+						<div class="list-content gotoevent" data-url="view.html?id=">
+						 <span class="list-title"><span class="place-right">
+						</span>Facility II</span>
+						 <span class="list-remark">2 nurses; 5 events; 3 targets</span> </div>
+						</a>
+		</div></div>
             </div>
         </div>
             
@@ -91,14 +79,6 @@
 
                 nurses = c.getFacilityNurses(fid);
                 $('#nurses').html(nurses);
-                supervisors = c.getFacilitySupervisors(fid);
-                $('#supervisors').html(supervisors);
-                
-                
-
-                supervisor = c.getFacilityNurses(fid);
-                $('#nurses').html(nurses);
-
 
                 $('.gotoevent').click(function(e) {
                     var url = $(this).data('url');
