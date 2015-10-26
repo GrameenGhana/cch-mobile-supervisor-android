@@ -18,7 +18,14 @@ public class User {
 	
 	public boolean hasSupervisorInfo()
 	{
-		return (this.sup_info.equals("")) ? false : true;
+		try {
+			return (this.sup_info.equals("")) ? false : true;
+
+		} catch (Exception e) {
+			
+		}
+		
+		return false;
 	}
 	
 	

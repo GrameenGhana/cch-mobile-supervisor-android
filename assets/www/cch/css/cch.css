@@ -130,4 +130,5 @@ tr:nth-child(even) {background: #f0f0f0}
 tr:nth-child(odd) {background: #FFF}
 div.span3{ }
 .itemdata strong{padding:0px 30px}
+div.group-content.graphical{font-size:12px}
 

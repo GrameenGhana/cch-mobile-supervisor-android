@@ -33,15 +33,15 @@
         <div class="listview-outlook" data-role="listview">
             <div class="list-group">
                    <a href="" class="group-title">Courses</a>
-                   <div id="coursecnt" class="group-content">
+                   <div id="coursecnt" class="group-content graphical">
 
 					</div> 
 					<h3>Final Quiz Average</h3>
-					<div id="coursefq" class="group-content">
+					<div id="coursefq" class="group-content graphical">
 
 					</div>
 										<h3>Course Completion Average</h3>
-					<div id="coursecc" class="group-content">
+					<div id="coursecc" class="group-content graphical">
 
 					</div>
 			</div>
@@ -52,7 +52,7 @@
         <div class="listview-outlook" data-role="listview">
             <div class="list-group">
                    <a href="" class="group-title">Targets</a>
-                   <div id="nurses" class="group-content">
+                   <div id="nurses" class="group-content graphical">
 
 					</div>
 			</div>
@@ -62,7 +62,7 @@
         <div class="listview-outlook" data-role="listview">
             <div class="list-group">
                    <a href="" class="group-title">Events</a>
-                   <div id="nurses" class="group-content">
+                   <div id="nurses" class="group-content graphical">
 
 					</div>
 			</div>
@@ -79,7 +79,7 @@
    		     
 
             regions = c.districtListInRegionGraph(fid);
-            c.showToast("DID: "+fid);
+
       $("#coursecnt").html(regions);
       regions = c.districtListInRegionGraphFinalScore(fid);
  $("#coursefq").html(regions);   

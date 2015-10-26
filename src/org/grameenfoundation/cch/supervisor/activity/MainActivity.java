@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +48,7 @@ public class MainActivity extends Activity implements SubmitListener   {
 	
 	private long pageOpenTime;
     private String oldPageUrl;
-	
+    WebAppInterface webInverter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,8 @@ public class MainActivity extends Activity implements SubmitListener   {
 		myWebView = (WebView) findViewById(R.id.webView1);	    	 
 		myWebView.getSettings().setJavaScriptEnabled(true);
 		myWebView.getSettings().setDomStorageEnabled(true);
-		myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
+	
+		myWebView.addJavascriptInterface(new WebAppInterface(this,MainActivity.this), "Android");
 		myWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		
 		this.setUpWebData();
@@ -86,27 +88,36 @@ public class MainActivity extends Activity implements SubmitListener   {
 						
 			User u = Db.getUser(userid);
 	    	
-			if (u == null) {
+			if (null == u) {
 	    		startActivity(new Intent(this, LoginActivity.class));
 				finish();
 	    	} 
-	    	
-	    	if(!u.hasSupervisorInfo())
-	    	{			
-	    		if (app.omUpdateSupervisorInfoTask == null)
-	    		{
-	    			ArrayList<Object> users = new ArrayList<Object>();
-	    			users.add(u);
-	    			Payload p = new Payload(users);
-	    			app.omUpdateSupervisorInfoTask = new UpdateSupervisorInfoTask(this);
-	    			app.omUpdateSupervisorInfoTask.setUpdateSupervisorInfoListener(this);
-	    			app.omUpdateSupervisorInfoTask.execute(p);
-	    			return;
-	    		}
-	    	}
+//			try{
+	    
+	    		if(!u.hasSupervisorInfo())
+		    	{			
+		    		if (app.omUpdateSupervisorInfoTask == null)
+		    		{
+		    			System.out.println("Pg 3");
+		    			ArrayList<Object> users = new ArrayList<Object>();
+		    			users.add(u);
+		    			Payload p = new Payload(users);
+
+		    			System.out.println("Pg 4");
+		    			app.omUpdateSupervisorInfoTask = new UpdateSupervisorInfoTask(this);
+		    			app.omUpdateSupervisorInfoTask.setUpdateSupervisorInfoListener(this);
+		    			app.omUpdateSupervisorInfoTask.execute(p);
+
+		    			System.out.println("Pg 5");
+		    			return;
+		    		}
+		    	
+			}
+//			}catch(Exception e ){}
+			
+			this.setUpWebView();
+			
 		}
-		
-		this.setUpWebView();
 	}
 	
 
@@ -119,8 +130,10 @@ public class MainActivity extends Activity implements SubmitListener   {
 		
 		CCHSupervisor app = (CCHSupervisor) this.getApplication();
 		app.omUpdateSupervisorInfoTask = null;
-		
-    	this.setUpWebView();
+		Toast.makeText(this, "Data loaded", Toast.LENGTH_LONG).show();
+		System.out.println("FOund : Updating read Facility");
+		System.out.println("Submit complete Main activity");
+		this.setUpWebView();
 	}
 		
 	public void setUpWebView()
@@ -143,6 +156,8 @@ public class MainActivity extends Activity implements SubmitListener   {
 						 
 						 if (viewMatcher.find()) {	
 							 String fid = viewMatcher.group().replace("id=", "");
+								System.out.println("javascript:loadData ('"+fid+"')");
+
 							 view.loadUrl("javascript:loadData('"+fid+"')");
 						 }
 		         }
@@ -189,13 +204,13 @@ public class MainActivity extends Activity implements SubmitListener   {
 	    pageOpenTime = System.currentTimeMillis();
 	    
 	    String url = HOME_URL;
-
 	    try 
 	    {
 			if (!(getIntent().getStringExtra("LOAD_URL")).isEmpty()) {	url = getIntent().getStringExtra("LOAD_URL"); }				
 		} catch (NullPointerException e) {}
 
 
+Log.i(TAG,"Home Urling : "+url);
 		myWebView.loadUrl(url);
 	}
 	

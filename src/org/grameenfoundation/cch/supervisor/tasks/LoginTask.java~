@@ -50,8 +50,7 @@ public class LoginTask extends AsyncTask<Payload, Object, Payload> {
 
 		String url = prefs.getString("prefServer", ctx.getString(R.string.prefServerDefault)) + CCHSupervisor.LOGIN_PATH;
 		JSONObject json = new JSONObject();
-				Log.d(TAG,"logging in url...." + url);
-
+		
 		HttpPost httpPost = new HttpPost(url);
 		try {
 			// update progress dialog
@@ -141,7 +140,6 @@ public class LoginTask extends AsyncTask<Payload, Object, Payload> {
 	protected void onPostExecute(Payload response) {
 		synchronized (this) {
             if (mStateListener != null) {
-System.out.println("Updat er submitComplete login task: ");
                mStateListener.submitComplete(response);
             }
         }

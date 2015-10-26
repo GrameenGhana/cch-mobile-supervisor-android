@@ -100,7 +100,8 @@ public class TrackerService extends Service implements SubmitListener {
 		if(response.isResult()){
 			User u = (User) response.getData().get(0);		
 	    	dbh.updateUser(u);
-		} 		
+		}
+System.out.println("submitComplete tracker");
 	}
 
 	@Override

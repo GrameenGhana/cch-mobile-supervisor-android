@@ -225,9 +225,12 @@ public class LoginActivity extends Activity implements SubmitListener {
 		if(response.isResult()){
 			// set preferences and add user to db
 			User u = (User) response.getData().get(0);
+			u.setSupervisorInfo("{}");
 			setUserPreferences(u);		
 	    	Db.addUser(u);
 	    	
+	    	System.out.println("Login Payload");
+	    	System.out.println("Submit complete login");
 			// return to main activity
 	    	startActivity(new Intent(this, MainActivity.class));
 			finish();
