@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.LocalDate;
+
 import android.text.format.DateFormat;
 
 public class Event { 
@@ -144,6 +146,60 @@ public class Event {
 		c.add(Calendar.DATE, 2);
 		return (milliSeconds >= c.getTimeInMillis()) ? true : false;
 	}
+	
+	public boolean isYesterday()
+	{
+		boolean result;
+			LocalDate previous = new LocalDate(this.start.getTime());
+	    			LocalDate now = new LocalDate().minusDays(1);
+    				
+	    			if((now.getDayOfMonth()==previous.getDayOfMonth())
+	    					&&(now.getMonthOfYear()==previous.getMonthOfYear()
+	    					&&(now.getYear()==previous.getYear()))){
+				result= true;
+			}else {
+				result= false;
+			}
+			
+			return result;
+	}
+	
+	public boolean isPastThisMonth() {
+		boolean result=false;
+		long milliSeconds = this.start.getTime();
+		LocalDate previous = new LocalDate(this.start.getTime());
+		 	    	LocalDate now = new LocalDate().minusDays(2);
+		 	    	
+		if((previous.getDayOfMonth()<=now.getDayOfMonth())
+			&&(previous.getMonthOfYear()==now.getMonthOfYear())
+			&&(previous.getYear()==now.getYear())){
+			result= true;
+		}else {
+			result= false;
+		}
+	
+		return result;
+		
+		}
+	
+	public boolean isPastLastMonth(long startDate) {
+		boolean result = false;
+		long milliSeconds = startDate;
+		LocalDate previous = new LocalDate(startDate);
+	 	    	LocalDate lastmonth = new LocalDate().minusMonths(1);
+				
+				if((previous.getMonthOfYear()==lastmonth.getMonthOfYear())
+						&&(previous.getYear()==lastmonth.getYear())){
+		if(previous.getMonthOfYear()==lastmonth.getMonthOfYear()){
+			result= true;
+		}else {
+			result= false;
+		}
+		
+		}
+	
+		return result;
+		}
 
 	public boolean isPast() {
 		long milliSeconds = this.start.getTime();

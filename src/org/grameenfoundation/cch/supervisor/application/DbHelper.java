@@ -124,6 +124,9 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String CCH_START = "start";
 	private static final String CCH_END = "end";
 	private static final String CCH_EVENTID = "event_id";
+	private static final String CCH_EVENTJUSTIFCATION = "justification";
+	private static final String CCH_EVENTCOMMENTS = "comments";
+	private static final String CCH_EVENTSTATUS = "status";
 
 	// ICTC Stuff
 	private static final String ICTC_FARMER = "ictc_farmer";
@@ -142,6 +145,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String NO_OF_DEPENDANT = "nod";
 	private static final String FARMER_ID = "farmer_id";
 	private static final String CLUSTER = "cluster";
+	
 
 	/**
 	 * obj.put("lname",farmer.getLastName()); obj.put("age",farmer.getAge());
@@ -588,7 +592,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	 */
 
 	public void eventAdd(String nurseId, String facId, String eventId,
-			String title, String type, long start, long end) {
+			String title, String type, long start, long end,String justification,String comments,String status) {
 		ContentValues values = new ContentValues();
 		values.put(CCH_NURSE_ID, nurseId);
 		values.put(CCH_EVENTID, eventId);
@@ -597,6 +601,9 @@ public class DbHelper extends SQLiteOpenHelper {
 		values.put(CCH_FACILITY_ID, facId);
 		values.put(CCH_START, longToDate(start));
 		values.put(CCH_END, longToDate(end));
+		values.put(CCH_EVENTJUSTIFCATION, justification);
+		values.put(CCH_EVENTCOMMENTS, comments);
+		values.put(CCH_EVENTSTATUS, status);
 		db.insert(CCH_CALENDAR_TABLE, null, values);
 		// db.close(); // Closing database connection
 	}

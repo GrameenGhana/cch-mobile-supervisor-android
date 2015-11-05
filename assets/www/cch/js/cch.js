@@ -100,6 +100,13 @@ function CCH() {
             this.getNurseCourses = function (nid) {
                 return Android.getNurseCourses(nid);
             },
+            this.getEventNurseName = function (id) {
+                return Android.getEventNurseName(id);
+            },
+            this.getEventNurseFacility = function (id) {
+                return Android.getEventNurseFacility(id);
+            },
+            
             // Events
             this.refreshEvents = function () {
                 Android.refreshEvents();
@@ -115,6 +122,30 @@ function CCH() {
             },
             this.refreshUserData = function () {
                 Android.refreshUserInformation();
+            },
+
+            this.getEventName = function (id) {
+                return Android.getEventName(id);
+            },
+
+            this.getEventLocation = function (id) {
+                return Android.getEventLocation(id);
+            },
+
+            this.getEventDate = function (id) {
+                return Android.getEventDate(id);
+            },
+
+            this.getEventDescription = function (id) {
+                return Android.getEventDescription(id);
+            },
+
+            this.getEventJustification = function (id) {
+                return Android.getEventJustification(id);
+            },
+
+            this.getEventComments = function (id) {
+                return Android.getEventComments(id);
             },
             //Role
 

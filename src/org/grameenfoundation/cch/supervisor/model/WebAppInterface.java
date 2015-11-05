@@ -17,6 +17,7 @@ import org.grameenfoundation.cch.supervisor.application.DbHelper;
 import org.grameenfoundation.cch.supervisor.listener.SubmitListener;
 import org.grameenfoundation.cch.supervisor.model.User;
 import org.grameenfoundation.cch.supervisor.tasks.UpdateSupervisorInfoTask;
+import org.joda.time.LocalDate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -701,16 +702,22 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 					for (MyEvent ev : f.events) {
 						if (period.toLowerCase().equals("future")
 								&& ev.isFuture()) {
-							evHtml += eventListItemAsHTML(ev, false, true);
+							evHtml += eventListItemAsHTML(ev, false, true,true);
 						} else if (period.toLowerCase().equals("tomorrow")
 								&& ev.isTomorrow()) {
-							evHtml += eventListItemAsHTML(ev, false, true);
+							evHtml += eventListItemAsHTML(ev, false, true,true);
 						} else if (period.toLowerCase().equals("today")
 								&& ev.isToday()) {
-							evHtml += eventListItemAsHTML(ev, false, true);
-						} else if (period.toLowerCase().equals("past")
-								&& ev.isPast()) {
-							evHtml += eventListItemAsHTML(ev, false, true);
+							evHtml += eventListItemAsHTML(ev, false, true,true);
+						} else if (period.toLowerCase().equals("pastlastmonth")
+								&& ev.isPastLastMonth()) {
+							evHtml += eventListItemAsHTML(ev, true, true,true);
+						}else if (period.toLowerCase().equals("pastthismonth")
+								&& ev.isPastThisMonth()) {
+							evHtml += eventListItemAsHTML(ev, true, true,true);
+						}else if (period.toLowerCase().equals("yesterday")
+								&& ev.isYesterday()) {
+							evHtml += eventListItemAsHTML(ev, true, true,true);
 						} else {
 						}
 					}
@@ -1034,17 +1041,23 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 						for (MyEvent ev : evs) {
 							if (period.toLowerCase().equals("future")
 									&& ev.isFuture()) {
-								evHtml += eventListItemAsHTML(ev, false, true);
+								evHtml += eventListItemAsHTML(ev, false, true,false);
 							} else if (period.toLowerCase().equals("tomorrow")
 									&& ev.isTomorrow()) {
-								evHtml += eventListItemAsHTML(ev, false, true);
+								evHtml += eventListItemAsHTML(ev, false, true,false);
 							} else if (period.toLowerCase().equals("today")
 									&& ev.isToday()) {
-								evHtml += eventListItemAsHTML(ev, false, true);
-							} else if (period.toLowerCase().equals("past")
-									&& ev.isPast()) {
-								evHtml += eventListItemAsHTML(ev, false, true);
-							} else {
+								evHtml += eventListItemAsHTML(ev, false, true,false);
+							} else if (period.toLowerCase().equals("pastlastmonth")
+									&& ev.isPastLastMonth()) {
+								evHtml += eventListItemAsHTML(ev, true, true,false);
+							} else if (period.toLowerCase().equals("pastthismonth")
+									&& ev.isPastThisMonth()) {
+								evHtml += eventListItemAsHTML(ev, true, true,false);
+							}else if (period.toLowerCase().equals("yesterday")
+									&& ev.isYesterday()) {
+								evHtml += eventListItemAsHTML(ev, true, true,false);
+							}else {
 							}
 						}
 					}
@@ -1311,6 +1324,219 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 
 		return evHtml;
 	}
+	
+	@JavascriptInterface
+	public String getEventName(String id) {
+		
+		String name = "unknown name";
+		System.out.println("Got id:"+id);
+		
+		// Find event
+				for (MyDistrict district : Districts) {
+					for (MyFacility f : district.getFacilities()) {
+						List<MyEvent> events = f.events;
+						for (MyEvent ev : events) {
+							if (String.valueOf(ev.eventId).equals(id)) {
+								return ev.eventType;
+							}
+						}
+
+					}
+				}
+
+		
+		return name;
+	}
+	
+	@JavascriptInterface
+	public String getEventLocation(String id) {
+		
+		String name = "unknown location";
+
+		// Find event
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.getFacilities()) {
+				List<MyEvent> events = f.events;
+				for (MyEvent ev : events) {
+				if (ev.eventId == Long.parseLong(id)) {
+					return ev.location;
+				}
+			
+				}
+
+			}
+		}
+
+
+return name;
+}
+	
+	@JavascriptInterface
+	public String getEventDate(String id) {
+		
+		String name = "unknown date";
+
+
+		// Find event
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.getFacilities()) {
+				List<MyEvent> events = f.events;
+				for (MyEvent ev : events) {
+				if (ev.eventId == Long.parseLong(id)) {
+					return ev.getDate("EEE, d MMM yyyy HH:mm:ss");
+				}
+			
+		}
+
+	}
+}
+
+
+return name;
+}
+	
+	@JavascriptInterface
+	public String getEventDescription(String id) {
+		
+		String name = "unknown description";
+
+
+		// Find event
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.getFacilities()) {
+				List<MyEvent> events = f.events;
+				for (MyEvent ev : events) {
+				if (ev.eventId == Long.parseLong(id)) {
+					return ev.description;
+				}
+			
+		}
+
+	}
+}
+
+
+return name;
+}
+	
+	@JavascriptInterface
+	public String getEventJustification(String id) {
+		
+		String name = "no justification";
+
+
+		// Find event
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.getFacilities()) {
+				List<MyEvent> events = f.events;
+				for (MyEvent ev : events) {
+				if (ev.eventId == Long.parseLong(id)) {
+					if(null != ev.justification){
+					    return ev.justification;
+					}else{
+						return name;
+					}
+				}
+			
+		}
+
+	}
+}
+
+
+return name;
+}
+	
+	@JavascriptInterface
+	public String getEventComments(String id) {
+		
+		String name = "no comments";
+
+
+		// Find event
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.getFacilities()) {
+				List<MyEvent> events = f.events;
+				for (MyEvent ev : events) {
+				if (ev.eventId == Long.parseLong(id)) {
+					if(null!= ev.comments){
+					    return ev.comments;
+					}else{
+						return name;
+					}
+				}
+			
+		}
+
+	}
+}
+
+
+return name;
+}
+	
+	
+	@JavascriptInterface
+	public String getEventNurseName(String id) {
+		System.out.println("Got id ->"+ id );
+		
+		String response = "not available";
+         
+		// Find facility
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.facilities) {
+				List<MyNurse> nurses = f.nurses;
+				for (MyNurse n : nurses) {
+						List<MyEvent> evs = n.events;
+						for (MyEvent ev : evs) {
+							
+							if (ev.eventId == Long.parseLong(id)) {
+								System.out.println("Got event of nurse ->" +n.name);
+								return n.name;
+								
+							}
+						}
+					
+				}
+			}
+		}
+
+		
+
+		return response;
+	}
+	
+	@JavascriptInterface
+	public String getEventNurseFacility(String id) {
+		System.out.println("Got id ->"+ id );
+		
+		String response = "not available";
+         
+		// Find facility
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.facilities) {
+				List<MyNurse> nurses = f.nurses;
+				for (MyNurse n : nurses) {
+						List<MyEvent> evs = n.events;
+						for (MyEvent ev : evs) {
+							
+							if (ev.eventId == Long.parseLong(id)) {
+								System.out.println("Got event of nurse ->" +n.facility);
+								return n.facility;
+								
+							}
+						}
+					
+				}
+			}
+		}
+
+		
+
+		return response;
+	}
+	
+	
 
 	@SuppressLint("DefaultLocale")
 	@JavascriptInterface
@@ -1323,7 +1549,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 			} else {
 				for (MyEvent ev : calEvents) {
 					if (ev.isFuture()) {
-						evHtml += eventListItemAsHTML(ev, false, true);
+						evHtml += eventListItemAsHTML(ev, false, true,true);
 					}
 				}
 			}
@@ -1333,7 +1559,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 			} else {
 				for (MyEvent ev : calEvents) {
 					if (ev.isTomorrow()) {
-						evHtml += eventListItemAsHTML(ev, false, false);
+						evHtml += eventListItemAsHTML(ev, false, false,true);
 					}
 				}
 			}
@@ -1343,7 +1569,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 			} else {
 				for (MyEvent ev : calEvents) {
 					if (ev.isPast()) {
-						evHtml += eventListItemAsHTML(ev, false, false);
+						evHtml += eventListItemAsHTML(ev, false, false,true);
 					}
 				}
 			}
@@ -1353,7 +1579,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 			} else {
 				for (MyEvent ev : calEvents) {
 					if (ev.isToday()) {
-						evHtml += eventListItemAsHTML(ev, true, false);
+						evHtml += eventListItemAsHTML(ev, true, false,true);
 					}
 				}
 			}
@@ -1378,7 +1604,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 	}
 
 	private String eventListItemAsHTML(MyEvent ev, Boolean inclFlag,
-			Boolean showDay) {
+			Boolean showDay,Boolean facilityEvent) {
 		String dformat = (showDay) ? "MMM dd" : "hh:mm a";
 		String d = ev.getDate(dformat);
 		String subtitle = (ev.location.equals("")) ? "No location specified"
@@ -1387,18 +1613,47 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 		String flag = "";
 		if (inclFlag) {
 			Calendar c = Calendar.getInstance();
-			flag = (ev.startDate <= c.getTimeInMillis()) ? "icon-flag-2 fg-red smaller"
-					: "";
+			if(ev.startDate <= c.getTimeInMillis()){
+			
+			if(ev.status.equals("complete")){
+				
+				flag =  "icon-checkmark fg-green ";
+				
+			}else if(ev.status.equals("incomplete")){
+				
+				flag =  "icon-cancel fg-red ";
+				
+			}else{
+				flag =  "icon-help fg-yellow ";
+			}
+			
+			}
+			
+			
+			
 		}
 		subtitle = (ev.description == "") ? ev.description : subtitle;
+		
+		if(facilityEvent){
 		return "<a class=\"list\" href=\"#\">"
-				+ "  <div class=\"list-content gotoevent\" data-url=\"viewcal/"
+				+ "  <div class=\"list-content gotoevent\" data-url=\"../eventplanner/view.html?id="
 				+ ev.eventId + "\"> "
 				+ "   <span class=\"list-title\"><span class=\"place-right "
 				+ flag + "\"></span>" + ev.eventType + "</span>"
 				+ "   <span class=\"list-remark\">" + ev.eventType + " at "
 				+ ev.location + " " + " <span class=\"place-right\">" + d
-				+ "		</span>" + "   </span>" + "</div></a>";
+				+ "		</span>" + "   </span>" 
+				+ "   <span class=\"list-remark\" style=\"color:#d80073; \">" + getEventNurseName(Long.toString(ev.eventId)) +  "</span>" + "</div></a>";
+		}else{
+			return "<a class=\"list\" href=\"#\">"
+					+ "  <div class=\"list-content gotoevent\" data-url=\"../eventplanner/view.html?id="
+					+ ev.eventId + "\"> "
+					+ "   <span class=\"list-title\"><span class=\"place-right "
+					+ flag + "\"></span>" + ev.eventType + "</span>"
+					+ "   <span class=\"list-remark\">" + ev.eventType + " at "
+					+ ev.location + " " + " <span class=\"place-right\">" + d
+					+ "		</span>" + "   </span> </div></a>" ;
+		}
 	}
 
 	private String emptyEventListItemAsHTML() {
@@ -1727,6 +1982,27 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 										.getString("start"));
 								Long eend = Long.parseLong(event
 										.getString("end"));
+								
+								String justification = "no justification";
+								try {
+								if(null != event.optString("justification")) { justification = event.getString("justification"); }
+								}catch(Exception ex){
+									//Log.e("WebAppInterface", ex.getMessage());
+								}
+								
+								String comments = "no comments";
+								try{
+								if(null != event.optString("comments")) { comments = event.getString("comments"); }
+								}catch(Exception ex){
+									//Log.e("WebAppInterface", ex.getMessage());
+								}
+								
+								String status = "unkown";
+								try{
+								if(null != event.optString("status")) { status = event.getString("status"); }
+								}catch(Exception ex){
+									//Log.e("WebAppInterface", ex.getMessage());
+								}
 
 								MyEvent ev = new MyEvent();
 								ev.eventId = eid;
@@ -1735,13 +2011,17 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 								ev.description = "";
 								ev.startDate = estart;
 								ev.endDate = eend;
+								ev.nurseId = nid;
+								ev.justification = justification;
+								ev.comments = comments;
+								ev.status = status;
 								eid = eid + 1;
 								es.add(ev);
 								// dbh.eventAdd(String.valueOf(nid), (fid),
 								// String.valueOf(ev.eventId), location,
 								// type, estart, eend);
 								facility.addEvent(eid, type, location, etitle,
-										estart, eend);
+										estart, eend,justification,comments,status);
 							}
 							facility.events = facility.getEvents();
 						}
@@ -2027,7 +2307,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 		}
 
 		public void addEvent(long id, String type, String location,
-				String desc, Long start, Long end) {
+				String desc, Long start, Long end,String justification,String comments,String status) {
 			if (!eventExists(type, location, desc, start, end)) {
 				MyEvent ev = new MyEvent();
 				ev.eventId = id;
@@ -2036,6 +2316,9 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 				ev.description = desc;
 				ev.startDate = start;
 				ev.endDate = end;
+				ev.justification = justification;
+				ev.comments = comments;
+				ev.status = status;
 				this.eventCnt++;
 				this.events.add(ev);
 			}
@@ -2057,7 +2340,7 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 			for (MyEvent e : this.events) {
 				if (type.equals(e.eventType) && location.equals(e.location)
 						&& desc.equals(e.description) && start == e.startDate
-						&& end == e.endDate) {
+						&& end == e.endDate  ) {
 					return true;
 				}
 			}
@@ -2205,12 +2488,17 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 	@SuppressLint("SimpleDateFormat")
 	private class MyEvent {
 
+		public Object status;
+		public String justification;
+		public String comments;
 		public long eventId;
 		public String eventType;
 		public String location;
 		public String description;
 		public Long startDate;
 		public Long endDate;
+		public long nurseId;
+		public long facilityId;
 
 		public boolean isToday() {
 			long milliSeconds = this.startDate;
@@ -2219,6 +2507,23 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 			return (DateFormat.format("MM/dd/yyyy", new Date(milliSeconds))
 					.toString().equals(today)) ? true : false;
 		}
+		
+		public boolean isYesterday()
+    	{
+    		boolean result;
+    			LocalDate previous = new LocalDate(this.startDate);
+		    			LocalDate now = new LocalDate().minusDays(1);
+	    				
+		    			if((now.getDayOfMonth()==previous.getDayOfMonth())
+		    					&&(now.getMonthOfYear()==previous.getMonthOfYear()
+		    					&&(now.getYear()==previous.getYear()))){
+    				result= true;
+    			}else {
+    				result= false;
+    			}
+    			
+    			return result;
+    	}
 
 		public boolean isTomorrow() {
 			long milliSeconds = this.startDate;
@@ -2249,6 +2554,43 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 
 			return (milliSeconds < c.getTimeInMillis()) ? true : false;
 		}
+		
+		public boolean isPastThisMonth() {
+			boolean result=false;
+			long milliSeconds = this.startDate;
+			LocalDate previous = new LocalDate(this.startDate);
+			LocalDate now = new LocalDate().minusDays(2);
+			 	    	
+			if((previous.getDayOfMonth()<=now.getDayOfMonth())
+				&&(previous.getMonthOfYear()==now.getMonthOfYear())
+				&&(previous.getYear()==now.getYear())){
+				result= true;
+			}else {
+				result= false;
+			}
+		
+			return result;
+			
+			}
+		
+		public boolean isPastLastMonth() {
+			boolean result = false;
+			long milliSeconds = this.startDate;
+			LocalDate previous = new LocalDate(this.startDate);
+		 	LocalDate lastmonth = new LocalDate().minusMonths(1);
+					
+					if((previous.getMonthOfYear()==lastmonth.getMonthOfYear())
+							&&(previous.getYear()==lastmonth.getYear())){
+			if(previous.getMonthOfYear()==lastmonth.getMonthOfYear()){
+				result= true;
+			}else {
+				result= false;
+			}
+			
+			}
+		
+			return result;
+			}
 
 		/*
 		 * public boolean isThisMonth() { return isThisMonth(false); } public

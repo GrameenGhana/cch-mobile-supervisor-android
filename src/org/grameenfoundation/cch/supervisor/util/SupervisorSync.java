@@ -179,10 +179,15 @@ List<District> myDistricts;
 										.getString("start"));
 								Long eend = Long.parseLong(event
 										.getString("end"));
+								
+								String justification = event.getString("justification");
+								String comments = event.getString("comments");
+								String status = event.getString("status");
+								
 								;
 								dbh.eventAdd(String.valueOf(nid), (fid),
 										String.valueOf(eid), location, type,
-										estart, eend);
+										estart, eend,justification,comments,status);
 
 							}
 						}

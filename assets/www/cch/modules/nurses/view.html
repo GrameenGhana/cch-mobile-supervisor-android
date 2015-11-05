@@ -31,8 +31,16 @@
             <div class="listview-outlook" data-role="listview">
             
              <div class="list-group collapsed">
-                    <a href="" class="group-title">Past</a>
-                    <div id="pastEvents" class="group-content"></div>
+                    <a href="" class="group-title">Last Month</a>
+                    <div id="pastLastMonthEvents" class="group-content"></div>
+                </div>
+                <div class="list-group collapsed">
+                    <a href="" class="group-title">This Month</a>
+                    <div id="pastThisMonthEvents" class="group-content"></div>
+                </div>
+                <div class="list-group">
+                    <a href="" class="group-title">Yesterday</a>
+                    <div id="yesterdayEvents" class="group-content"></div>
                 </div>
                 <div class="list-group">
                     <a href="" class="group-title">Today</a>
@@ -111,8 +119,16 @@
 
                     events = c.getNurseEventsList('future', nid);
                     $('#futureEvents').html(events); 
-                     events = c.getNurseEventsList('past', nid);
-                    $('#pastEvents').html(events);
+
+                     events = c.getNurseEventsList('pastlastmonth', nid);
+                    $('#pastLastMonthEvents').html(events);
+
+                    events = c.getNurseEventsList('pastthismonth', nid);
+                    $('#pastThisMonthEvents').html(events);
+
+                    events = c.getNurseEventsList('yesterday', nid);
+                    $('#yesterdayEvents').html(events);
+
 
 //                    targets = c.getNurseTargets(nid);
 //                    $('#targets').html(targets);

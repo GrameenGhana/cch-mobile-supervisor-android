@@ -132,3 +132,29 @@ div.span3{ }
 .itemdata strong{padding:0px 30px}
 div.group-content.graphical{font-size:12px}
 
+
+/* added by Liman */
+  .status_complete:before{
+	  content: "";
+	  background: url(../images/ic_complete_new.png) no-repeat;
+	  width:16px;
+	  height:16px;
+	  display: block;
+  }
+
+.status_not_complete:before{
+	content: "";
+	background: url(../images/ic_close.png) no-repeat;
+	width:16px;
+	height:16px;
+	display: block;
+}
+
+.status_empty:before{
+	content: "";
+	background: url(../images/ic_question.png) no-repeat;
+	width:16px;
+	height:16px;
+	display: block;
+}
+

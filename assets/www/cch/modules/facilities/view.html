@@ -30,9 +30,17 @@
 
         <h2>Events</h2> <hr/>
         <div class="listview-outlook" data-role="listview">
-        <div class="list-group collapsed">
-                <a href="" class="group-title">Past</a>
-                <div id="pastEvents" class="group-content"></div>
+            <div class="list-group collapsed">
+                <a href="" class="group-title">Last Month</a>
+                <div id="pastLastMonthEvents" class="group-content"></div>
+            </div>
+            <div class="list-group collapsed">
+                <a href="" class="group-title">This Month</a>
+                <div id="pastThisMonthEvents" class="group-content"></div>
+            </div>
+            <div class="list-group collapsed">
+                <a href="" class="group-title">Yesterday</a>
+                <div id="yesterdayEvents" class="group-content"></div>
             </div>
             <div class="list-group">
                 <a href="" class="group-title">Today</a>
@@ -80,8 +88,14 @@
                 events = c.getFacilityEventsList('today', fid);
     	        $('#todaysEvents').html(events);
     	        
-    	        events = c.getFacilityEventsList('past', fid);
-    	        $('#pastEvents').html(events);
+    	        events = c.getFacilityEventsList('pastlastmonth', fid);
+    	        $('#pastLastMonthEvents').html(events);
+
+                events = c.getFacilityEventsList('pastthismonth', fid);
+                $('#pastThisMonthEvents').html(events);
+
+                events = c.getFacilityEventsList('yesterday', fid);
+                $('#yesterdayEvents').html(events);
                      
                 events = c.getFacilityEventsList('tomorrow', fid);
     	        $('#tomorrowsEvents').html(events);  	
