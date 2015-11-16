@@ -1931,15 +1931,28 @@ return name;
 								int achieved = Integer.parseInt(ach);
 								System.out.println("T : " + tr + " Ach : "
 										+ ach);
-								int tar = Integer.parseInt(tr);
+								int tar =0 ;
+								try{
+									 tar = Integer.parseInt(tr);
+								}catch(Exception ex){
+									
+								}
+								
 								String type = target.getString("type");
 								String category = target.getString("category");
 								String justification = target
 										.getString("justification");
 								String start = target.getString("start");
 								String end = target.getString("end");
-								long id = Long
+								long id = 0;
+								
+								try {
+								 id = Long
 										.parseLong(target.getString("id"));
+								}catch(Exception ex){
+									
+								}
+								
 								//
 								if (!category.equalsIgnoreCase("other")) {
 									MyTarget myTarget = new MyTarget();

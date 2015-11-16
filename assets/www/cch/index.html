@@ -23,6 +23,7 @@
   </head>
 
   <body class="metro home">
+  <div class="se-pre-con"></div>
       
     <div class="container">
 
@@ -117,8 +118,13 @@ padding: 10px !important;padding-bottom:3px">
     </div>
     </div>
    
-    <script src="js/cch.js"></script>   
-      <script type="text/javascript">
+    <script src="js/cch.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+  <script type="text/javascript">
+      $(window).load(function() {
+          // Animate loader off screen
+          $(".se-pre-con").fadeOut("slow");;
+      });
                      //var c = new CCH();                         	
     				 //events = c.getTodaysEventsSnippet();
     				 //$(events).insertBefore($('#plannerbadgebrand'));

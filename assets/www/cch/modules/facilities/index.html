@@ -21,6 +21,7 @@
   </head>
 
   <body class="metro">
+  <div class="se-pre-con"></div>
 
     <div class="container">
 
@@ -29,11 +30,20 @@
    
         <div id="facilities" class="listview-outlook" data-role="listview">
         </div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
         <script type="text/javascript">
+            $(window).load(function() {
+                // Animate loader off screen
+                $(".se-pre-con").fadeOut("slow");;
+            });
+
             var c = new CCH();    
             facilities = c.getFacilityList();
    		    $('#facilities').html(facilities);
+
+
         </script>
+
     </div>
   </body>
 </html>

@@ -22,6 +22,7 @@
   </head>
 
   <body class="metro">
+  <div class="se-pre-con"></div>
 
     <div class="container">
 
@@ -40,9 +41,15 @@
         <h3> Comments : <b id="eventcomments"></b> </h3>
         <br/><br/>
 
-        
+
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
             
         <script type="text/javascript">
+            $(window).load(function() {
+                // Animate loader off screen
+                $(".se-pre-con").fadeOut("slow");;
+            });
+
             function loadData(id)
             {
                 var c = new CCH();   

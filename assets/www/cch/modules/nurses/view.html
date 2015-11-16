@@ -21,6 +21,7 @@
     </head>
 
     <body class="metro">
+    <div class="se-pre-con"></div>
 
         <div class="container">
 
@@ -35,7 +36,7 @@
                     <div id="pastLastMonthEvents" class="group-content"></div>
                 </div>
                 <div class="list-group collapsed">
-                    <a href="" class="group-title">This Month</a>
+                    <a href="" class="group-title">Past This Month</a>
                     <div id="pastThisMonthEvents" class="group-content"></div>
                 </div>
                 <div class="list-group">
@@ -103,7 +104,14 @@
                 </div>
             </div>
 
+            <script src="../../js/jquery.blockUI.js"></script>
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
             <script type="text/javascript">
+
+                $(window).load(function() {
+                    // Animate loader off screen
+                    $(".se-pre-con").fadeOut("slow");;
+                });
 
                 function loadData(nid)
                 {
@@ -152,6 +160,17 @@
                     $('#courses').html(courses);
 
                     $('.gotoevent').click(function (e) {
+
+                        $.blockUI({ message: '<h4> <img src="../../images/Preloader_8.gif" /></h4>',css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .5,
+                            color: '#fff'
+                        } });
+
                         var url = $(this).data('url');
                         window.location = url;
                     });

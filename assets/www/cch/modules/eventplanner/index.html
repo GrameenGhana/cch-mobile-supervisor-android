@@ -22,6 +22,7 @@
   </head>
 
   <body class="metro">
+  <div class="se-pre-con"></div>
 
     <div class="container">
 
@@ -56,9 +57,15 @@
                    <a href="" class="group-title">Past</a>
                    <div id="pastEvents" class="group-content"></div>
             </div>
-            
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
             <script type="text/javascript">
-                     var c = new CCH();    
+
+                $(window).load(function() {
+                    // Animate loader off screen
+                    $(".se-pre-con").fadeOut("slow");;
+                });
+
+                     var c = new CCH();
 
                      c.refreshEvents();
 
