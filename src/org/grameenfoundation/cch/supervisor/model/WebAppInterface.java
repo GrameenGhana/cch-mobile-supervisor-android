@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -139,6 +140,8 @@ public class WebAppInterface implements SubmitListener {
 		return name;
 	}
 
+	  ProgressDialog dialog;
+	
 	@JavascriptInterface
 	public void refreshUserInformation() {
 		SharedPreferences prefs = PreferenceManager
@@ -156,6 +159,8 @@ public class WebAppInterface implements SubmitListener {
 
 		Payload p = new Payload(users);
 		showToast("Refreshing for the most recent Data Please wait...");
+		dialog = ProgressDialog.show(mainActivity, "Please wait...", "Loading data ...", true);
+		dialog.setCancelable(false);
 		System.out.println("Getting most data");
 		Log.i(TAG, "Getting most data");
 		UpdateSupervisorInfoTask omUpdateSupervisorInfoTask = new UpdateSupervisorInfoTask(
@@ -2681,11 +2686,15 @@ return name;
 	public void submitComplete(Payload response) {
 		if (response.isResult()) {
 			User u = (User) response.getData().get(0);
-			showToast("Data Successfully Loaded");
+			
 			DbHelper dbh = new DbHelper(mContext);
 			dbh.updateUser(u);
 			dbh.resetData();
 			readFacilityNurseInfo();
+			
+			dialog.dismiss();
+			showToast("Data Successfully Loaded");
+			
 			System.out.println("After Reload");
 			mainActivity.setUpWebView();
 		}
