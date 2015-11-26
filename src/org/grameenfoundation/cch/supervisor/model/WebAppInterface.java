@@ -1616,16 +1616,18 @@ return name;
 				: ev.eventType + " at " + ev.location;
 
 		String flag = "";
+		String status = "pending";
 		if (inclFlag) {
 			Calendar c = Calendar.getInstance();
 			if(ev.startDate <= c.getTimeInMillis()){
 			
 			if(ev.status.equals("complete")){
+				status = "complete";
 				
 				flag =  "icon-checkmark fg-green ";
 				
 			}else if(ev.status.equals("incomplete")){
-				
+				status = "incomplete";
 				flag =  "icon-cancel fg-red ";
 				
 			}else{
@@ -1640,7 +1642,7 @@ return name;
 		subtitle = (ev.description == "") ? ev.description : subtitle;
 		
 		if(facilityEvent){
-		return "<a class=\"list\" href=\"#\">"
+		return "<a class=\"list  "+ status  +" \" href=\"#\">"
 				+ "  <div class=\"list-content gotoevent\" data-url=\"../eventplanner/view.html?id="
 				+ ev.eventId + "\"> "
 				+ "   <span class=\"list-title\"><span class=\"place-right "
@@ -1650,7 +1652,7 @@ return name;
 				+ "		</span>" + "   </span>" 
 				+ "   <span class=\"list-remark\" style=\"color:#d80073; \">" + getEventNurseName(Long.toString(ev.eventId)) +  "</span>" + "</div></a>";
 		}else{
-			return "<a class=\"list\" href=\"#\">"
+			return "<a class=\"list "+ status  +"\" href=\"#\">"
 					+ "  <div class=\"list-content gotoevent\" data-url=\"../eventplanner/view.html?id="
 					+ ev.eventId + "\"> "
 					+ "   <span class=\"list-title\"><span class=\"place-right "
