@@ -877,6 +877,68 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 
 		return name;
 	}
+	
+	@JavascriptInterface
+	public int getNurseCoursesKSACount(String id,String status) {
+		//readFacilityNurseInfo();
+
+		int count = 0;
+
+		// Find nurses
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.getFacilities()) {
+				List<MyNurse> nurses = f.nurses;
+				nurses.addAll(f.supervisors);
+				for (MyNurse n : nurses) {
+					if (String.valueOf(n.id).equals(id)) {
+						int passed = 0;
+						int eligible = 0;
+						int inprogress = 0;
+						
+						for (MyCourse c : n.courses) {
+							String percentageCompletion = c.status;
+							percentageCompletion = (percentageCompletion.equalsIgnoreCase("")) ? "0"
+									: percentageCompletion;
+							int perCompletion = Integer.parseInt(percentageCompletion);
+							
+							String score =  c.score ;
+							int finalScore;
+							if ((c.score.equals("Not taken"))) {
+								finalScore = 0;
+								inprogress ++;
+							} else {
+								try {
+									finalScore = Integer.parseInt(score);
+									if(finalScore >= 85 && perCompletion >= 85 ){
+										eligible ++;
+									}else {
+										inprogress ++;
+									}
+								} catch (Exception e) {
+									System.out.println("Score Error :(" + score + ")"
+											+ e.getLocalizedMessage());
+								}
+
+							}
+						}
+						
+						if(status.equalsIgnoreCase("eligible")){
+							return eligible;
+						}else if(status.equalsIgnoreCase("inprogress")){
+							return inprogress;
+						}else{
+							return passed;
+						}
+					}
+					
+					
+				}
+
+			}
+		}
+
+		return count;
+	}
 
 	@SuppressLint("DefaultLocale")
 	@JavascriptInterface
@@ -905,6 +967,42 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 				Collections.sort(nurses, new NurseNameComparator());
 				for (MyNurse n : nurses) {
 					nurseHtml += nurseListItemAsHTML(n);
+				}
+
+				nurseHtml += "</div></div>";
+			}
+		}
+
+		return nurseHtml;
+	}
+	
+	@SuppressLint("DefaultLocale")
+	@JavascriptInterface
+	public String getNurseListKSA() {
+		// readFacilityNurseInfo();
+
+		processNurseFacility();
+		String nurseHtml = "";
+
+		if (nurseNum == 0) {
+			nurseHtml = emptyNurseListItemAsHTML();
+		} else {
+			for (MyDistrict district : Districts) {
+				nurseHtml += "<div class=\"list-group\">"
+						+ "    <a href=\"\" class=\"group-title\">"
+						+ district.name + "</a>"
+						+ "    <div class=\"group-content\">";
+
+				ArrayList<MyNurse> nurses = new ArrayList<MyNurse>();
+				for (MyFacility fac : district.getFacilities()) {
+					for (MyNurse n : fac.nurses) {
+						nurses.add(n);
+					}
+				}
+
+				Collections.sort(nurses, new NurseNameComparator());
+				for (MyNurse n : nurses) {
+					nurseHtml += nurseListKSAItemAsHTML(n);
 				}
 
 				nurseHtml += "</div></div>";
@@ -975,6 +1073,86 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 									+ " Courses Count : " + n.courses.size());
 							for (MyCourse c : n.courses) {
 								nurseHtml += nurseCourseListItemAsHTML(c);
+							}
+						} else {
+							nurseHtml = emptyNurseCourseListItemAsHTML();
+						}
+
+						return nurseHtml;
+					}
+				}
+			}
+		}
+
+		// System.out.println("Nurse List : "+nurse);
+		return nurseHtml;
+	}
+	
+	@SuppressLint("DefaultLocale")
+	@JavascriptInterface
+	public String getNurseCoursesKSA(String id,String status) {
+		// readFacilityNurseInfo();
+
+		String nurseHtml = "";
+
+		// Find nurses
+		for (MyDistrict district : Districts) {
+			for (MyFacility f : district.facilities) {
+				List<MyNurse> nurses = f.nurses;
+				nurses.addAll(f.supervisors);
+				for (MyNurse n : nurses) {
+					if (String.valueOf(n.id).equals(id)) {
+						if (n.courses.size() > 0) {
+							Collections.sort(n.courses,
+									new CourseNameComparator());
+
+							System.out.println("NurseId  " + id
+									+ " Courses Count : " + n.courses.size());
+							for (MyCourse c : n.courses) {
+								
+								if(status.equalsIgnoreCase("passed")) {
+									nurseHtml = emptyNurseCourseListItemAsHTML();
+									return nurseHtml;
+								}
+								
+								String percentageCompletion = c.status;
+								percentageCompletion = (percentageCompletion.equalsIgnoreCase("")) ? "0"
+										: percentageCompletion;
+								int perCompletion = Integer.parseInt(percentageCompletion);
+								
+								String score =  c.score ;
+								int finalScore;
+								if ((c.score.equals("Not taken"))) {
+									finalScore = 0;
+									if(status.equalsIgnoreCase("inprogress")) {
+										nurseHtml += nurseCourseListItemAsHTML(c);
+									}
+								} else {
+									try {
+										finalScore = Integer.parseInt(score);
+										if( status.equalsIgnoreCase("eligible")){
+											if(finalScore >= 85 && perCompletion >= 85 ){
+												
+												nurseHtml += nurseCourseListItemAsHTML(c);
+											
+											}
+										}
+										else if(status.equalsIgnoreCase("inprogress")) {
+											if(finalScore < 85 || perCompletion < 85 ){
+												
+												nurseHtml += nurseCourseListItemAsHTML(c);
+											
+											}
+											
+										}
+									} catch (Exception e) {
+										System.out.println("Score Error :(" + score + ")"
+												+ e.getLocalizedMessage());
+									}
+
+								}
+								
+								
 							}
 						} else {
 							nurseHtml = emptyNurseCourseListItemAsHTML();
@@ -1140,6 +1318,76 @@ System.out.println("Inside Now  getDistrictListInRegion Start " + id);
 				+ nu.name + "</span>" + "   <span class=\"list-subtitle\">"
 				+ nu.title + " - " + location + "</span>"
 				+ "   <span class=\"list-remark\">" + subtitle + "</span>"
+				+ "  </div>" + "</a>";
+	}
+	
+	private String nurseListKSAItemAsHTML(MyNurse nu) {
+		int passed = 0;
+		int eligible = 0;
+		int inprogress = 0;
+		
+		for (MyCourse c : nu.courses) {
+			String percentageCompletion = c.status;
+			percentageCompletion = (percentageCompletion.equalsIgnoreCase("")) ? "0"
+					: percentageCompletion;
+			int perCompletion = Integer.parseInt(percentageCompletion);
+			
+			String score =  c.score ;
+			int finalScore;
+			if ((c.score.equals("Not taken"))) {
+				finalScore = 0;
+				inprogress ++;
+			} else {
+				try {
+					finalScore = Integer.parseInt(score);
+					if(finalScore >= 85 && perCompletion >= 85){
+						eligible ++;
+					}else {
+						inprogress ++;
+					}
+				} catch (Exception e) {
+					System.out.println("Score Error :(" + score + ")"
+							+ e.getLocalizedMessage());
+				}
+
+			}
+		}
+		
+		String status = "";
+			
+			if(passed == 0){ status = "passed "; }
+			if(eligible == 0){ status += "eligible "; }
+			if(inprogress == 0){ status += "inprogress"; }
+		
+		
+		
+		String subtitle1 = "<span class=\"icon-flag-2 fg-green smaller \"></span>" 
+		                  + " Passed ("  + passed + ") &nbsp;&nbsp;&nbsp;" ;
+		
+		subtitle1 += "<span class=\"icon-flag-2 fg-yellow smaller \"></span>" 
+                + " Eligible ("  + eligible + ") &nbsp;&nbsp;&nbsp;";
+		
+		subtitle1 += "<span class=\"icon-flag-2 fg-wine smaller \"></span>" 
+                + " In progress ("  + inprogress + ")";
+		
+		String subtitle2 = (nu.courses.size() == 0) ? "No courses" : nu.courses
+				.size() + " courses";
+		subtitle2 += (nu.events.size() == 0) ? ";  No events this month" : ";  "
+				+ nu.events.size() + " events";
+		subtitle2 += (nu.targets.size() == 0) ? ";  No targets" : ";  "
+				+ nu.targets.size() + " targets";
+		
+		String location = nu.district + ", " + nu.facility;
+
+		return "<a class=\"list "+status+" \" href=\"#\">"
+				+ "  <div class=\"list-content gotoevent  \" data-url=\"/android_asset/www/cch/modules/nurses/view.html?id="
+				+ nu.id
+				+ "\"> "
+				+ "   <span class=\"list-title\"><span class=\"place-right\"></span>"
+				+ nu.name + "</span>" + "   <span class=\"list-subtitle\">"
+				+ nu.title + " - " + location + "</span>"
+				+ "   <span class=\"list-remark\">" + subtitle1 + "</span>"
+				+ "   <span class=\"list-remark\">" + subtitle2 + "</span>"
 				+ "  </div>" + "</a>";
 	}
 
@@ -1616,23 +1864,36 @@ return name;
 				: ev.eventType + " at " + ev.location;
 
 		String flag = "";
-		String status = "pending";
+		String status = "";
 		if (inclFlag) {
 			Calendar c = Calendar.getInstance();
 			if(ev.startDate <= c.getTimeInMillis()){
 			
 			if(ev.status.equals("complete")){
-				status = "complete";
 				
 				flag =  "icon-checkmark fg-green ";
 				
 			}else if(ev.status.equals("incomplete")){
-				status = "incomplete";
 				flag =  "icon-cancel fg-red ";
 				
 			}else{
 				flag =  "icon-help fg-yellow ";
 			}
+			
+			if(ev.status.equals("complete")){
+				status += " complete ";
+				
+			}
+			
+			if(ev.status.equals("incomplete")){
+				status += " notcomplete ";
+				
+			}
+
+			if(ev.status.equals("unknown")  ){
+				status += " pending ";
+			}
+			
 			
 			}
 			

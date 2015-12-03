@@ -92,7 +92,7 @@
                    
                     <div class="listview-outlook" data-role="listview">
                         <div class="list-group">
-                            <a href="" class="group-title">Event <span class='badget'></a></a>
+                            <a href="" class="group-title">Event <span class='badget'></a>
                             <div id="eventTarget" class="group-content"></div>
                         </div>
 
@@ -121,12 +121,29 @@
 
             <!--<h2><span class="nursename"></span>'s Courses</h2> <hr/> -->
 
-            <div class="listview-outlook" data-role="listview">
-                <div class="list-group">
-                    <a href="" class="group-title"><span style="font-weight:bold" class="nursename"></span>'s Courses</a>
-                    <div id="courses" class="group-content"></div>
+
+                    <h2></h2><span style="font-weight:bold" class="nursename"></span>'s Courses</h2>
+                    <h5 >Eligibility for NMC Certification: <span style="color: #1dff81">85%+ of course read and 85%+ score in Final Exam</span></h5>
+
+                    <div class="listview-outlook" data-role="listview">
+                        <div class="list-group">
+                            <a href="" class="group-title">Passed NMC Certification  (<span style="font-weight:bold" id="ksapassedcount"></span>) <span class='badget'></a></a>
+                            <div id="ksapassed" class="group-content"></div>
+                        </div>
+
+                        <div class="list-group ">
+                            <a href="" class="group-title">Eligible for NMC Certification (<span style="font-weight:bold" id="ksaeligiblecount"></span>)</a>
+                            <div id="ksaeligible" class="group-content"></div>
+                        </div>
+
+                        <div class="list-group ">
+                            <a href="" class="group-title">In Progress (<span style="font-weight:bold" id="ksainprogresscount"></span>)</a>
+                            <div id="ksainprogress" class="group-content"></div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
+
 
             <script src="../../js/jquery.blockUI.js"></script>
             <script src="../../js/modernizr.js"></script>
@@ -142,8 +159,8 @@
                         if($(this).attr("value")=="complete"){
                             $(".complete").toggle();
                         }
-                        if($(this).attr("value")=="incomplete"){
-                            $(".incomplete").toggle();
+                        if($(this).attr("value")=="notcomplete"){
+                            $(".notcomplete").toggle();
                         }
                         if ($(this).attr("value")=="pending"){
                             $(".pending").toggle();
@@ -193,9 +210,34 @@
 
                    
 
-                    courses = c.getNurseCourses(nid);
+                    ksapassed = c.getNurseCoursesKSA(nid,"passed");
                    
-                    $('#courses').html(courses);
+                    $('#ksapassed').html(ksapassed);
+
+                    ksaeligible = c.getNurseCoursesKSA(nid,"eligible");
+
+                    $('#ksaeligible').html(ksaeligible);
+
+                    ksainprogress = c.getNurseCoursesKSA(nid,"inprogress");
+
+                    $('#ksainprogress').html(ksainprogress);
+
+
+                    // COUNT of courses
+                    ksapassedcount = c.getNurseCoursesKSACount(nid,"passed");
+
+                    $('#ksapassedcount').html(ksapassedcount);
+
+                    ksaeligiblecount = c.getNurseCoursesKSACount(nid,"eligible");
+
+                    $('#ksaeligiblecount').html(ksaeligiblecount);
+
+                    ksainprogresscount = c.getNurseCoursesKSACount(nid,"inprogress");
+
+                    $('#ksainprogresscount').html(ksainprogresscount);
+
+
+
 
                     $('.gotoevent').click(function (e) {
 

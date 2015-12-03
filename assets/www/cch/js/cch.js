@@ -88,6 +88,9 @@ function CCH() {
             this.getNurseList = function () {
                 return Android.getNurseList();
             },
+            this.getNurseListKSA = function () {
+            return Android.getNurseListKSA();
+            },
             this.getNurseEventsList = function (period, id) {
                 return Android.getNurseEventsList(period, id);
             },
@@ -100,6 +103,14 @@ function CCH() {
             this.getNurseCourses = function (nid) {
                 return Android.getNurseCourses(nid);
             },
+            this.getNurseCoursesKSA = function (nid,status) {
+            return Android.getNurseCoursesKSA(nid,status);
+            },
+
+            this.getNurseCoursesKSACount = function (nid,status) {
+                return Android.getNurseCoursesKSACount(nid,status);
+            },
+
             this.getEventNurseName = function (id) {
                 return Android.getEventNurseName(id);
             },

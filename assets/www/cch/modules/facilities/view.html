@@ -49,9 +49,9 @@
 
         <h2>Events</h2> <hr/>
         <div class="checkboxes">
-        <label><input type="checkbox" name="statusCheckbox" value="complete"><span>Complete</span> </label>
-        <label><input type="checkbox" name="statusCheckbox" value="notcomplete"><span>Not Complete</span> </label>
-        <label><input type="checkbox" name="statusCheckbox" value="pending"><span>Pending</span> </label>
+        <label><input type="checkbox" name="statusCheckbox" value="complete" id="complete"><span>Complete</span> </label>
+        <label><input type="checkbox" name="statusCheckbox" value="notcomplete" id="notcomplete"><span>Not Complete</span> </label>
+        <label><input type="checkbox" name="statusCheckbox" value="pending" id="pending"><span>Pending</span> </label>
         </div>
         <div class="listview-outlook" data-role="listview">
             <div class="list-group collapsed">
@@ -113,17 +113,33 @@
             });
 
             $(document).ready(function(){
-                $('input[type="checkbox"]').click(function(){
-                    if($(this).attr("value")=="complete"){
-                        $(".complete").toggle();
-                    }
-                    if($(this).attr("value")=="incomplete"){
-                        $(".incomplete").toggle();
-                    }
-                    if ($(this).attr("value")=="pending"){
-                        $(".pending").toggle();
-                    }
-                });
+
+               $('#complete').change(function () {
+                if (this.checked) 
+        
+                  $('.complete').fadeIn('slow');
+                else 
+                  $('.complete').fadeOut('slow');
+              });
+
+               $('#notcomplete').change(function () {
+                if (this.checked) 
+        
+                  $('.notcomplete').fadeIn('slow');
+                else 
+                  $('.notcomplete').fadeOut('slow');
+              });
+
+
+               $('#pending').change(function () {
+                if (this.checked) 
+        
+                  $('.pending').fadeIn('slow');
+                else 
+                  $('.pending').fadeOut('slow');
+              });
+
+               
             });
 
 
