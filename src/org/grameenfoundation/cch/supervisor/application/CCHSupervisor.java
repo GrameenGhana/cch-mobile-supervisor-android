@@ -27,7 +27,7 @@ public class CCHSupervisor extends Application {
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd");
     public static final DateTimeFormatter TIME_FORMAT = DateTimeFormat.forPattern("HH:mm:ss");
 
-    public UpdateCCHLogTask omUpdateCCHLogTask = null;
+    public UpdateCCHLogTask omUpdateCCHLogTask = null; 
     public UpdateSupervisorInfoTask omUpdateSupervisorInfoTask = null;
 
     public static boolean isLoggedIn(Activity act) {
