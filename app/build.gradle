@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "org.grameenfoundation.cch.supervisor"
+        minSdkVersion 17
+        targetSdkVersion 23
+        versionCode 17
+        versionName "1.6"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'joda-time:joda-time:2.2'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile project(':StickyListHeaders-release')
+    //testCompile 'junit:junit:4.12'
+}

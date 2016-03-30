@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_background_empty"
+    android:minHeight="144dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="0" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="32dp"
+            android:layout_weight="0"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <org.grameenfoundation.cch.supervisor.ui.font.RobotoTextView
+                android:id="@+id/list_item_event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:textColor="@color/main_color_grey_700"
+                android:text="Event Title"
+                android:textSize="15sp"
+                app:typeface="robotoLight" />
+
+            <org.grameenfoundation.cch.supervisor.ui.font.RobotoTextView
+                android:id="@+id/list_item_event_nurse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:textColor="@color/main_color_grey_700"
+                android:text="Scheduled by First Last"
+                android:textSize="8sp"
+                app:typeface="robotoLight" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right" >
+
+            <ImageView
+                android:id="@+id/list_item_event_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <org.grameenfoundation.cch.supervisor.ui.font.RobotoTextView
+        android:id="@+id/list_item_event_dm1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="22dp"
+        android:textColor="@color/main_color_grey_700"
+        android:text="Justification:"
+        android:textSize="8sp"
+        app:typeface="robotoLight" />
+
+    <org.grameenfoundation.cch.supervisor.ui.font.RobotoTextView
+        android:id="@+id/list_item_event_justification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="4"
+        android:paddingBottom="12dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:text="Didn't want to do the work"
+        android:textColor="@color/main_color_grey_700"
+        android:textSize="12sp"
+        app:typeface="robotoRegular" />
+
+    <org.grameenfoundation.cch.supervisor.ui.font.RobotoTextView
+        android:id="@+id/list_item_event_dm2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="22dp"
+        android:textColor="@color/main_color_grey_700"
+        android:text="Comments:"
+        android:textSize="8sp"
+        app:typeface="robotoLight" />
+
+    <org.grameenfoundation.cch.supervisor.ui.font.RobotoTextView
+        android:id="@+id/list_item_event_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="4"
+        android:paddingBottom="12dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:text="No comment."
+        android:textColor="@color/main_color_grey_700"
+        android:textSize="12sp"
+        app:typeface="robotoRegular" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="0"
+        android:background="@color/main_color_500" />
+
+</LinearLayout>

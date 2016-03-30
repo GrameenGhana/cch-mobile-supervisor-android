@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_sync"
+        android:icon="@drawable/ic_refresh"
+        android:title="@string/action_sync"/>
+
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_action_logout"
+        android:title="@string/action_logout"/>
+
+</menu>

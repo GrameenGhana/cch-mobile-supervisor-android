@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/StickyListHeaders-release/StickyListHeaders-release.iml" filepath="$PROJECT_DIR$/StickyListHeaders-release/StickyListHeaders-release.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cch-mobile-supervisor-android.iml" filepath="$PROJECT_DIR$/cch-mobile-supervisor-android.iml" />
+    </modules>
+  </component>
+</project>

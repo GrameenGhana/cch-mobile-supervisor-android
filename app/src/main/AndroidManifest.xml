@@ -1,0 +1,63 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.grameenfoundation.cch.supervisor">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:name="org.grameenfoundation.cch.supervisor.Supervisor"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.StartupActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/FullscreenTheme"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+
+        <activity
+            android:name=".activity.ViewDistrictActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+
+        <activity
+            android:name=".activity.ViewFacilityActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+
+        <activity
+            android:name=".activity.ViewNurseActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+
+        <service
+            android:name="org.grameenfoundation.cch.supervisor.service.UpdateService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/service_tracker" >
+        </service>
+
+        <receiver android:name=".service.UpdateServiceReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

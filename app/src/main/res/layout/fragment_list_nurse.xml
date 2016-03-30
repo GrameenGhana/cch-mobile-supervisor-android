@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_red_500"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="12dp">
+
+        <org.grameenfoundation.cch.supervisor.ui.view.MaterialRippleLayout
+            style="@style/RippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:rippleColor="@color/material_red_600" >
+
+            <CheckBox style="@style/CheckBoxStyle.Dark"
+                android:id="@+id/inProgress"
+                android:layout_width="match_parent"
+                android:textSize="10sp"
+                android:text="In Progress" />
+
+        </org.grameenfoundation.cch.supervisor.ui.view.MaterialRippleLayout>
+
+        <org.grameenfoundation.cch.supervisor.ui.view.MaterialRippleLayout
+            style="@style/RippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:rippleColor="@color/material_red_600" >
+
+            <CheckBox
+                style="@style/CheckBoxStyle.Dark"
+                android:id="@+id/eligible"
+                android:layout_width="match_parent"
+                android:textSize="12sp"
+                android:text="Eligible" />
+
+        </org.grameenfoundation.cch.supervisor.ui.view.MaterialRippleLayout>
+
+        <org.grameenfoundation.cch.supervisor.ui.view.MaterialRippleLayout
+            style="@style/RippleStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:rippleColor="@color/material_red_600" >
+
+            <CheckBox
+                style="@style/CheckBoxStyle.Dark"
+                android:id="@+id/passed"
+                android:layout_width="match_parent"
+                android:textSize="12sp"
+                android:text="Passed" />
+
+        </org.grameenfoundation.cch.supervisor.ui.view.MaterialRippleLayout>
+
+    </LinearLayout>
+
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+        android:id="@+id/fragment_nurse_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp" />
+
+</LinearLayout>
+
