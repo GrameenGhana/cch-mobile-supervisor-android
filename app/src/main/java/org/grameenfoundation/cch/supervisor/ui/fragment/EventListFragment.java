@@ -1,26 +1,25 @@
 package org.grameenfoundation.cch.supervisor.ui.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-
-import com.nhaarman.listviewanimations.appearance.StickyListHeadersAdapterDecorator;
-import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
-import com.nhaarman.listviewanimations.util.StickyListHeadersListViewWrapper;
+import android.widget.ExpandableListView;
 
 import org.grameenfoundation.cch.supervisor.R;
 import org.grameenfoundation.cch.supervisor.Supervisor;
 import org.grameenfoundation.cch.supervisor.model.Event;
 import org.grameenfoundation.cch.supervisor.repository.ModelRepository;
-import org.grameenfoundation.cch.supervisor.ui.adaptor.MyStickyListHeadersEventAdapter;
+import org.grameenfoundation.cch.supervisor.ui.adaptor.AnimatedExpandableListEventAdapter;
+import org.grameenfoundation.cch.supervisor.ui.view.AnimatedExpandableListView;
 
 import java.util.ArrayList;
-
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class EventListFragment extends Fragment implements View.OnClickListener {
 
@@ -31,7 +30,7 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
     private CheckBox mPending;
     private CheckBox mInComplete;
     private CheckBox mComplete;
-	private StickyListHeadersListView listView;
+    private AnimatedExpandableListView listView;
 
 	private int position;
     private static String eventType;
@@ -59,8 +58,7 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_list_event, container, false);
-        listView = (StickyListHeadersListView) rootView.findViewById(R.id.fragment_event_list);
-        //listView.setBackgroundResource(R.drawable.list_bg);
+        listView = (AnimatedExpandableListView) rootView.findViewById(R.id.fragment_event_list);
 
         mPending = (CheckBox) rootView.findViewById(R.id.pending);
         mInComplete = (CheckBox) rootView.findViewById(R.id.incomplete);
@@ -79,23 +77,32 @@ public class EventListFragment extends Fragment implements View.OnClickListener 
                         ? ModelRepository.getFacilityEvents(eventTypeId, mPending.isChecked(), mInComplete.isChecked(), mComplete.isChecked())
                         : ModelRepository.getNurseEvents(eventTypeId, mPending.isChecked(), mInComplete.isChecked(), mComplete.isChecked());
 
-        // Create list of regions with districts
-        AlphaInAnimationAdapter animationAdapter;
-        MyStickyListHeadersEventAdapter adapter = new MyStickyListHeadersEventAdapter(Supervisor.mAppContext, e);
+        AnimatedExpandableListView.AnimatedExpandableListAdapter adapter = new AnimatedExpandableListEventAdapter(Supervisor.mAppContext, e);
+        listView.setAdapter(adapter);
 
-        animationAdapter = new AlphaInAnimationAdapter(adapter);
-        StickyListHeadersAdapterDecorator stickyListHeadersAdapterDecorator =
-                new StickyListHeadersAdapterDecorator(animationAdapter);
-        stickyListHeadersAdapterDecorator
-                .setListViewWrapper(new StickyListHeadersListViewWrapper(listView));
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (listView.isGroupExpanded(groupPosition)) {
+                    listView.collapseGroupWithAnimation(groupPosition);
+                } else {
+                    listView.expandGroupWithAnimation(groupPosition);
+                }
+                return true;
+            }
+        });
 
-        assert animationAdapter.getViewAnimator() != null;
-        animationAdapter.getViewAnimator().setInitialDelayMillis(500);
+        // Set indicator (arrow) to the right
+        Resources r = getResources();
+        DisplayMetrics metrics = Supervisor.mAppContext.getResources().getDisplayMetrics();
 
-        assert stickyListHeadersAdapterDecorator.getViewAnimator() != null;
-        stickyListHeadersAdapterDecorator.getViewAnimator().setInitialDelayMillis(500);
-
-        listView.setAdapter(stickyListHeadersAdapterDecorator);
+        int width = metrics.widthPixels;
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            listView.setIndicatorBounds(width - px, width);
+        } else {
+            listView.setIndicatorBoundsRelative(width - px, width);
+        }
 
 		ViewCompat.setElevation(rootView, 50);
 

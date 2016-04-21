@@ -36,6 +36,7 @@ public class Event implements Serializable{
 		return  "Scheduled by " + nurse + " on " + longToDate(this.start, showDay);
 	}
 
+
     public String getCategory() {
         if (isFuture()) { return "Future";
         } else if (isTomorrow()) { return "Tomorrow";

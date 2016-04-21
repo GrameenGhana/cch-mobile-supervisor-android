@@ -8,8 +8,8 @@ android {
         applicationId "org.grameenfoundation.cch.supervisor"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 17
-        versionName "1.6"
+        versionCode 18
+        versionName "1.7"
     }
 
     buildTypes {
