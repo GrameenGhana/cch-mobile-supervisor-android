@@ -22,12 +22,14 @@ public class Course implements Serializable
 	public String facility;
 
 	public String statsText() {
-        return (quiz_status==1 && !isInprogress()) ? "Final quiz score: "+score+"%"
-                                : ((attempts==0) ? "Not taken" : "% Complete: " + percentageCompletion +"%");
+        return "Final: "+ ((quiz_status==1 && !isInprogress()) ? score+"%" : "not taken");
 	}
 
     public String lastAccessed() {
-        return "Attempts: " + attempts + "    Time Taken: " + timeTaken +"    Last accessed: "+last_accessed;
+        return "Attempts: " + attempts +
+               "    % Complete: " + percentageCompletion + "%" +
+               "    Time Spent: " + timeTaken +
+               "    Last accessed: "+last_accessed;
     }
 
     public String getCategory() {
