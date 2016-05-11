@@ -7,10 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -22,7 +23,7 @@ import org.grameenfoundation.cch.supervisor.task.SynchronizationListener;
 import org.grameenfoundation.cch.supervisor.task.SynchronizationManager;
 import org.grameenfoundation.cch.supervisor.util.ConnectionUtils;
 
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
 
@@ -31,7 +32,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     private ProgressDialog progressDialog = null;
 
     private long activityStartTime;
-
+    private boolean mShouldFinish = false;
     protected User user;
 
     @Override
@@ -220,11 +221,19 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK)  {
-            finish();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            goBack();
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        goBack();
+    }
+
 
     @Override
     public void onStop() {
@@ -243,10 +252,27 @@ public abstract class BaseActivity extends ActionBarActivity {
         return true;
     }
 
+    protected void goBack() {
+        if (!getPageTag().equals("Main page"))  {
+            startActivity(new Intent(this, StartupActivity.class));
+            finish();
+        } else {
+            if (!mShouldFinish && getPageTag().equals("Main page")) {
+                Toast.makeText(getApplicationContext(), R.string.logout_confirm, Toast.LENGTH_SHORT).show();
+                mShouldFinish = true;
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            case android.R.id.home:
+                goBack();
+                return true;
             case R.id.menu_sync:
                 startSynchronization();
                 return true;

@@ -56,7 +56,7 @@ public class SupervisorListFragment extends Fragment  {
 
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         listView = (StickyListHeadersListView) rootView.findViewById(R.id.fragment_list);
-        listView.setBackgroundResource(R.drawable.list_bg);
+        //listView.setBackgroundResource(R.drawable.list_bg);
 
         ArrayList<Nurse> n = (eventType.equalsIgnoreCase("facility"))
                 ? ModelRepository.getFacilitySupervisors(eventTypeId, false, false, false)

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.nhaarman.listviewanimations.ArrayAdapter;
 
 import org.grameenfoundation.cch.supervisor.R;
+import org.grameenfoundation.cch.supervisor.Supervisor;
 import org.grameenfoundation.cch.supervisor.activity.BaseActivity;
 import org.grameenfoundation.cch.supervisor.model.Course;
 import org.grameenfoundation.cch.supervisor.repository.ModelRepository;
@@ -102,7 +103,7 @@ public class MyStickyListHeadersCourseAdapter extends ArrayAdapter<String> imple
         holder.ksa.setText(mCoursesList.get(position).title);
         holder.stats.setText(mCoursesList.get(position).lastAccessed());
 
-        if (mCoursesList.get(position).isInprogress()) {
+        if (mCoursesList.get(position).isInprogress() || !Supervisor.getUser().getRole().equalsIgnoreCase("district admin")) {
             holder.iconPlay.setVisibility(View.INVISIBLE);
         } else {
             holder.iconPlay.setVisibility(View.VISIBLE);

@@ -109,7 +109,8 @@ public class MyStickyListHeadersFacilityAdapter extends ArrayAdapter<String> imp
 		}
 
 		holder.icon.setTag(position);
-		holder.header.setText(mFacilityList.get(position).facilityType);
+		String facType = (mFacilityList.get(position).facilityType.equals("HC")) ? "Health Center" : "CHPS";
+		holder.header.setText(facType);
 
 		return view;
 	}

@@ -23,7 +23,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +43,6 @@ public class ViewNurseActivity extends BaseActivity {
 	private PagerSlidingTabStrip tabs;
 	private ViewPager pager;
 
-    private ImageView mImage;
     private TextView mFirstLine;
     private TextView mSecondLine;
     private TextView mThirdLine;
@@ -64,12 +62,10 @@ public class ViewNurseActivity extends BaseActivity {
     }
 
     public void refresh() {
-        mImage = (ImageView) findViewById(R.id.main_avatar_image);
         mFirstLine = (TextView) findViewById(R.id.main_first_line);
         mSecondLine = (TextView) findViewById(R.id.main_second_line);
         mThirdLine = (TextView) findViewById(R.id.main_third_line);
 
-        mImage.setImageResource(R.drawable.ic_launcher);
         mFirstLine.setText(nurse.name);
         mSecondLine.setText(nurse.title);
         mThirdLine.setText(nurse.statsText());

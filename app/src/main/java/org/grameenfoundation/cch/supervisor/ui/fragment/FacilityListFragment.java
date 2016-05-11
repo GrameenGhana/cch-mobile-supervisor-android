@@ -45,7 +45,7 @@ public class FacilityListFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         listView = (StickyListHeadersListView) rootView.findViewById(R.id.fragment_list);
-        listView.setBackgroundResource(R.drawable.list_bg);
+        //listView.setBackgroundResource(R.drawable.list_bg);
 
         // Create list of regions with districts
         AlphaInAnimationAdapter animationAdapter;

@@ -60,7 +60,7 @@ public class NurseListFragment extends Fragment implements View.OnClickListener 
 
         View rootView = inflater.inflate(R.layout.fragment_list_nurse, container, false);
         listView = (StickyListHeadersListView) rootView.findViewById(R.id.fragment_nurse_list);
-        listView.setBackgroundResource(R.drawable.list_bg);
+        //listView.setBackgroundResource(R.drawable.list_bg);
 
         mInProgress = (CheckBox) rootView.findViewById(R.id.inProgress);
         mEligible = (CheckBox) rootView.findViewById(R.id.eligible);

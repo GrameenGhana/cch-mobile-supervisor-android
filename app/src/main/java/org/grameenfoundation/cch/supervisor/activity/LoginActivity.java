@@ -168,6 +168,7 @@ public class LoginActivity extends Activity implements SubmitListener {
 					startActivity(new Intent(this, StartupActivity.class));
 					finish();
 				} else {
+					showProgress(false);
 					mPasswordView.setError(getString(R.string.error_incorrect_password));
 					focusView = mPasswordView;
 					focusView.requestFocus();

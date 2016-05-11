@@ -24,7 +24,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.TypedValue;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,13 +57,11 @@ public class ViewDistrictActivity extends BaseActivity {
     protected String getPageTag() { return PAGE_TAG; }
 
     public void refresh() {
-        ImageView mImage = (ImageView) findViewById(R.id.main_avatar_image);
         TextView mFirstLine = (TextView) findViewById(R.id.main_first_line);
         TextView mSecondLine = (TextView) findViewById(R.id.main_second_line);
         TextView mThirdLine = (TextView) findViewById(R.id.main_third_line);
 
         try {
-            mImage.setImageResource(R.drawable.ic_launcher);
             mFirstLine.setText(district.name);
             mSecondLine.setText(district.region);
             mThirdLine.setText(district.statsText());

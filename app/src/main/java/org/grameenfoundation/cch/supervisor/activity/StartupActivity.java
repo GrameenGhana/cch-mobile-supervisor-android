@@ -1,7 +1,6 @@
 package org.grameenfoundation.cch.supervisor.activity;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nhaarman.listviewanimations.appearance.StickyListHeadersAdapterDecorator;
@@ -24,6 +23,7 @@ public class StartupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
     }
 
     @Override
@@ -39,19 +39,17 @@ public class StartupActivity extends BaseActivity {
 
     public void refresh() {
         // Set layout details
-        ImageView mImage = (ImageView) findViewById(R.id.main_avatar_image);
         TextView mName = (TextView) findViewById(R.id.main_first_line);
         TextView mRole = (TextView) findViewById(R.id.main_second_line);
         StickyListHeadersListView listView = (StickyListHeadersListView) findViewById(R.id.activity_main_list);
 
         // Set up top bar
-        mImage.setImageResource(R.drawable.ic_launcher);
         mName.setText(user.getDisplayName());
         mRole.setText(user.getRole());
         ((TextView) findViewById(R.id.main_third_line)).setText("");
 
         // Create list of regions with districts
-        listView.setBackgroundResource(R.drawable.list_bg);
+        //listView.setBackgroundResource(R.drawable.list_bg);
         MyStickyListHeadersDistrictAdapter adapter = new MyStickyListHeadersDistrictAdapter(this, ModelRepository.getDistricts());
 
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
